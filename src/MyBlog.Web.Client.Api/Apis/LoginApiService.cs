@@ -17,14 +17,14 @@ namespace MyBlog.Web.Client.Api.Apis
 
         public async Task<OperateResult<LoginInfo>> LoginAsync(LoginModel login)
         {
-            var response = await _httpClient.PostAsJsonAsync("/api/Login/LoginAsync", login);
+            var response = await _httpClient.PostAsJsonAsync("/api/Login/Login", login);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<OperateResult<LoginInfo>>();
         }
 
         public async Task<OperateResult> LogoutAsync()
         {
-            var response = await _httpClient.PostAsync("/api/Login/LogoutAsync", null);
+            var response = await _httpClient.PostAsync("/api/Login/Logout", null);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<OperateResult>();
         }
