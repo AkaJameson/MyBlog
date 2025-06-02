@@ -41,12 +41,13 @@ namespace MyBlog.Services.ServicesImpl
             {
                 return OperateResult.Failed<LoginInfo>("登录失败，请检查输入");
             }
-            var result = _configuration.GetSection("Credentials").Get<string>();
-            if (result == null)
+            var account = _configuration.GetSection("Credentials").GetValue<string>("Account");
+            var password = _configuration.GetSection("Credentials").GetValue<string>("Password");
+            if (string.IsNullOrEmpty(account) ||string.IsNullOrEmpty(password))
             {
                 return OperateResult.Failed<LoginInfo>("登录失败，请联系管理员");
             }
-            if (result != loginModel.Password)
+            if ( account != loginModel.Account ||password != loginModel.Password)
             {
                 return OperateResult.Failed<LoginInfo>("登录失败，密码错误");
             }
@@ -60,7 +61,7 @@ namespace MyBlog.Services.ServicesImpl
             var identity = new ClaimsIdentity(claims, "X-Auth-Cookie");
             var principal = new ClaimsPrincipal(identity);
             await _httpContextAccessor.HttpContext.SignInAsync(principal);
-            return OperateResult.Successed<LoginInfo>(null);
+            return OperateResult.Successed(new LoginInfo() { Account = loginModel.Account });
         }
         /// <summary>
         /// 登出

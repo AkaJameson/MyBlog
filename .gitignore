@@ -1,16 +1,9 @@
-﻿################################################################################
-# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
-################################################################################
+# 忽略 Visual Studio 生成的临时文件夹
+.vs/
+*/**/.vs/
+*/.vs/
+# 递归忽略 * 目录下所有解决方案的 bin 文件夹
+*/**/bin/
 
-/src/.vs/MyBlog
-/src/.vs/MyBlog
-/src/MyBlog/bin/Debug/net8.0
-/src/MyBlog/obj
-/src/MyBlog.DataAccessor.EFCore/bin/Debug/net8.0
-/src/MyBlog.DataAccessor.EFCore/obj
-/src/MyBlog.Models/bin/Debug/net8.0
-/src/MyBlog.Models/obj
-/src/MyBlog.Services/bin/Debug/net8.0
-/src/MyBlog.Services/obj
-/src/MyBlog.Utilites/bin/Debug/net8.0
-/src/MyBlog.Utilites/obj
+# 递归忽略 * 目录下所有解决方案的 obj 文件夹
+*/**/obj/
