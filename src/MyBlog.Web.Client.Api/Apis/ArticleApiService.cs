@@ -63,5 +63,11 @@ namespace MyBlog.Web.Client.Api.Apis
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<OperateResult>();
         }
+        public async Task<OperateResult> QuerySingleArticle(int id, bool addViews = true)
+        {
+            var response = await _httpClient.GetAsync($"/api/Article/QuerySingleArticle?id={id}&addViews={addViews}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<OperateResult<ArticleInfo>>();
+        }
     }
 }

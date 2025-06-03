@@ -12,5 +12,6 @@ namespace MyBlog.Services.Services
         Task<OperateResult<ArticleDto>> QueryGarbageArticle(ArticleQuery articleQuery);
         Task<OperateResult> RecoverArticle(int id);
         Task<OperateResult> UpdateArtile(ArticleUpdate artical);
+        Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool addViews = true);
     }
 }

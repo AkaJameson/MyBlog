@@ -37,7 +37,7 @@ namespace MyBlog.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "删除文章", Description = "将指定文章移到回收站")]
         [Authorize]
-        public async Task<OperateResult> DeleteArticle([FromQuery]int id)
+        public async Task<OperateResult> DeleteArticle([FromQuery] int id)
         {
             if (id <= 0)
             {
@@ -64,13 +64,12 @@ namespace MyBlog.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "查询文章", Description = "查询所有文章列表")]
         [Authorize]
-        public async  Task<OperateResult<ArticleDto>> QueryArticle([FromBody] ArticleQuery articleQuery)
+        public async Task<OperateResult<ArticleDto>> QueryArticle([FromBody] ArticleQuery articleQuery)
         {
             if (!ModelState.IsValid)
             {
                 return OperateResult.Failed<ArticleDto>("无效的查询参数");
             }
-            articleQuery.IsPublished = true;
             return await _articleService.QueryArticle(articleQuery);
         }
 
@@ -114,6 +113,18 @@ namespace MyBlog.WebApi.Controllers
                 return OperateResult.Failed("无效的文章数据");
             }
             return await _articleService.UpdateArtile(article);
+        }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "更新文章", Description = "更新指定文章的内容")]
+        public async Task<OperateResult> QuerySingle([FromQuery] int id, [FromQuery] bool addViews)
+        {
+            if (!ModelState.IsValid)
+            {
+                return OperateResult.Failed("无效的请求格式");
+            }
+            return await _articleService.QuerySingleArticle(id, addViews);
         }
     }
 }

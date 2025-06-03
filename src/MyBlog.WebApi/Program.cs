@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MyBlog.DataAccessor.EFCore;
 using MyBlog.DataAccessor.EFCore.UnitofWork;
 using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Utilites;
 using Si.Logging;
+using System.Text;
 
 namespace MyBlog.WebApi
 {
@@ -53,13 +56,38 @@ namespace MyBlog.WebApi
             builder.Services.AddAllApisByScan();
             builder.Services.AddAuthorization();
             builder.Services.AddAntiforgery();
-            builder.Services.AddAuthentication("X-Auth-Token")
-            .AddCookie("X-Auth-Token", option =>
+            builder.Services.AddAuthentication(options =>
             {
-                option.LoginPath = "/Login";
-                option.ExpireTimeSpan = TimeSpan.FromHours(3);
-                option.SlidingExpiration = true;
-            });
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+             .AddJwtBearer(options =>
+             {
+                 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidIssuer = jwtSettings["Issuer"],
+                     ValidateAudience = true,
+                     ValidAudience = jwtSettings["Audience"],
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"])),
+                     ValidateLifetime = true,
+                     ClockSkew = TimeSpan.Zero
+                 };
+                 options.Events = new JwtBearerEvents()
+                 {
+                     OnMessageReceived = context =>
+                     {
+                         var token = context.Request.Cookies["Access-Token"];
+                         if (!string.IsNullOrEmpty(token))
+                         {
+                             context.Token = token;
+                         }
+                         return Task.CompletedTask;
+                     }
+                 };
+             });
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddControllers();
             var app = builder.Build();
@@ -69,7 +97,6 @@ namespace MyBlog.WebApi
                 app.UseSwaggerUI();
             }
             app.UseStaticFiles();
-            app.UseAntiforgery();
             app.UseExceptionHandler(errorApp =>
             {
                 errorApp.Run(async context =>

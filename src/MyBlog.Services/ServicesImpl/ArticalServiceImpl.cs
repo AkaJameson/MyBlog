@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyBlog.DataAccessor.EFCore;
 using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Models.Data;
@@ -7,11 +6,6 @@ using MyBlog.Models.Dto;
 using MyBlog.Models.Models;
 using MyBlog.Services.Services;
 using MyBlog.Utilites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyBlog.Services.ServicesImpl
 {
@@ -110,6 +104,30 @@ namespace MyBlog.Services.ServicesImpl
             }
             await _unitOfWork.CommitAsync();
             return OperateResult.Successed();
+        }
+        public async Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool addViews = true)
+        {
+            var article = await _unitOfWork.GetRepository<Article>().Where(p => p.Id == id).Include(p => p.Category).FirstOrDefaultAsync();
+            if (article == null)
+            {
+                return OperateResult.Failed<ArticleInfo>("文章不存在");
+            }
+            if (addViews)
+            {
+                article.Views++;
+                await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+                await _unitOfWork.CommitAsync();
+            }
+            return OperateResult.Successed<ArticleInfo>(new ArticleInfo
+            {
+                CategoryName =article.Category.CategoryName,
+                CategroyId = article.CategoryId,
+                Content = article.Content,
+                CreateTime = article.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                Id = article.Id,
+                Title = article.Title,
+                views = article.Views,
+            });
         }
         /// <summary>
         /// 查询文章

@@ -4,6 +4,7 @@
     {
         public List<NavItem> NavItems { get; set; } = new List<NavItem>
         {
+            new NavItem { Herf ="/write",  Icon="fa-solid fa-pen" ,  Text = "写博客"},
             new NavItem { Herf = "/posts", Icon = "fa-solid fa-book", Text = "文章管理" },
             new NavItem { Herf = "/category", Icon = "fa-solid fa-list", Text = "类别管理" },
             new NavItem { Herf = "/garbages", Icon = "fa-solid fa-trash", Text = "回收站" },

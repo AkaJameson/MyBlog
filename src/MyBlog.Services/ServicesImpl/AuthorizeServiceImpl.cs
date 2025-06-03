@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using MyBlog.DataAccessor.EFCore;
 using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Models.Dto;
 using MyBlog.Models.Models;
 using MyBlog.Services.Services;
 using MyBlog.Utilites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MyBlog.Services.ServicesImpl
 {
@@ -57,10 +56,25 @@ namespace MyBlog.Services.ServicesImpl
                 new Claim(ClaimTypes.Role, "Admin"),
 
             };
-
-            var identity = new ClaimsIdentity(claims, "X-Auth-Cookie");
-            var principal = new ClaimsPrincipal(identity);
-            await _httpContextAccessor.HttpContext.SignInAsync(principal);
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = jwtSettings["Issuer"],
+                Audience = jwtSettings["Audience"],
+                Expires = DateTime.Now.AddMinutes(int.Parse(jwtSettings["ExpiryMinutes"])),
+                SigningCredentials = credentials,
+                Claims = claims.ToDictionary(c => c.Type, c => (object)c.Value)
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("Access-Token", tokenHandler.WriteToken(token), new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddMinutes(int.Parse(jwtSettings["ExpiryMinutes"])),
+                SameSite = SameSiteMode.Lax
+            });
             return OperateResult.Successed(new LoginInfo() { Account = loginModel.Account });
         }
         /// <summary>
@@ -69,7 +83,7 @@ namespace MyBlog.Services.ServicesImpl
         /// <returns></returns>
         public async Task<OperateResult> LogoutAsync()
         {
-            await _httpContextAccessor.HttpContext.SignOutAsync("X-Auth-Cookie");
+            await _httpContextAccessor.HttpContext.SignOutAsync("X-Auth-Token");
             return OperateResult.Successed();
         }
     }

@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "新建配置文件",
+    "Projects": [
+      {
+        "Path": "MyBlog.WebApi\\MyBlog.WebApi.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "MyBlog.Web.Client\\MyBlog.Web.Client.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

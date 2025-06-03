@@ -11,11 +11,15 @@ namespace MyBlog.Web.Client
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
             builder.Services.AddBootstrapBlazor();
+            builder.Services.AddTransient<CredentialsHandler>();
             var apiAddress = builder.Configuration.GetValue<string>("ApiAddress");
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiAddress) });
-            builder.Services.AddAllApis()
-                            .AddHttpClient("client")
-                            .ConfigureHttpClient(client => client.BaseAddress = new Uri(apiAddress));
+            builder.Services.AddHttpClient("client", client =>
+            {
+                client.BaseAddress = new Uri(apiAddress);
+            }).AddHttpMessageHandler<CredentialsHandler>();
+            builder.Services.AddAllApis();
+
             await builder.Build().RunAsync();
         }
     }
