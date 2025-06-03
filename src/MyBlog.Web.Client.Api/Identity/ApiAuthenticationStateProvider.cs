@@ -17,8 +17,13 @@ namespace MyBlog.Web.Client.Api.Identity
                 var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
                 return Task.FromResult(new AuthenticationState(anonymousUser));
             }
+            var identity = new ClaimsIdentity(new[]
+            {
+                  new Claim(ClaimTypes.Name, _session.userName)
+            }, "apiauth");
+
             return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(
-              new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, _session.userName) }))));
+              new ClaimsIdentity(identity))));
         }
         public void NotifyUserAuthentication()
         {
