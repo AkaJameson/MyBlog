@@ -1,5 +1,6 @@
 ﻿using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using MyBlog.Web.Client.Api.Apis;
 using System.ComponentModel.DataAnnotations;
@@ -17,7 +18,6 @@ namespace MyBlog.Web.Client.Pages
         private MessageService? MessageService { get; set; }
         [Inject]
         public LoginApiService LoginService { get; set; }
-
         private LoginModel Model { get; set; } = new LoginModel();
 
         public class LoginModel
@@ -40,7 +40,7 @@ namespace MyBlog.Web.Client.Pages
                 });
                 if (result?.Succeeded == true)
                 {
-                    NavigationManager.NavigateTo("/dashboard");
+                    NavigationManager.NavigateTo("/posts");
                 }
                 else
                 {

@@ -17,9 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebInterfaces", "WebInterfa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebViews", "WebViews", "{ACADC8DB-3FDE-4C5C-9C7E-9E9647D0EDD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBlog.Web.Client", "MyBlog.Web.Client\MyBlog.Web.Client.csproj", "{2A111B7E-85C8-4C91-9EF3-0D1123E03136}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBlog.Web.Client", "MyBlog.Web.Client\MyBlog.Web.Client.csproj", "{2A111B7E-85C8-4C91-9EF3-0D1123E03136}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBlog.Web.Client.Api", "MyBlog.Web.Client.Api\MyBlog.Web.Client.Api.csproj", "{77DD530E-737D-4690-B736-6D704263F808}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBlog.Web.Client.Api", "MyBlog.Web.Client.Api\MyBlog.Web.Client.Api.csproj", "{77DD530E-737D-4690-B736-6D704263F808}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

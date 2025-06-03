@@ -1,23 +1,28 @@
 ﻿@page "/posts"
-<Table TItem="Blog"
-       PageItemsSource="new int[]{10,20,50}"
-       IsStriped="true" IsBordered="true"
-       ShowToolbar="true" ShowSkeleton="true" IsPagination="true"
-       IsMultipleSelect="true" OnQueryAsync="@OnQueryAsync" ShowDefaultButtons="false">
-    <TableColumns>
-        <TableColumn @bind-Field="context.Title" Text="标题"></TableColumn>
-        <TableColumn @bind-Field="context.CategoryName" Text="分类"></TableColumn>
-        <TableColumn @bind-Field="context.CreateTime" Text="创建时间"></TableColumn>
-        <TableColumn @bind-Field="context.views" Text="浏览数"></TableColumn>
-        <TableColumn @bind-Field="context.Id" Text="操作">
-            <Template Context="value">
-                <div class="col4 col-4 col-sm-3 col-md-2 col-lg-auto mx4">
-                    <Button ButtonStyle="ButtonStyle.Round" Color="Color.Primary">查看</Button>
-                </div>
-                <div class="col-4 col-sm-3 col-md-2 col-lg-auto">
-                    <Button ButtonStyle="ButtonStyle.Round" Color="Color.Danger">删除</Button>
-                </div>
-            </Template>
-        </TableColumn>
-    </TableColumns>
-</Table>
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@layout MainLayout
+<div class="container">
+    <Table TItem="Blog"
+           PageItemsSource="new int[]{10,20,50}"
+           IsStriped="true" IsBordered="true"
+           ShowToolbar="true" ShowSkeleton="true" IsPagination="true"
+           IsMultipleSelect="true" OnQueryAsync="@OnQueryAsync" ShowDefaultButtons="false">
+        <TableColumns>
+            <TableColumn @bind-Field="context.Title" Text="标题"></TableColumn>
+            <TableColumn @bind-Field="context.CategoryName" Text="分类"></TableColumn>
+            <TableColumn @bind-Field="context.CreateTime" Text="创建时间"></TableColumn>
+            <TableColumn @bind-Field="context.views" Text="浏览数"></TableColumn>
+            <TableColumn @bind-Field="context.Id" Text="操作">
+                <Template Context="value">
+                    <div class="col4 col-4 col-sm-3 col-md-2 col-lg-auto mx4">
+                        <Button ButtonStyle="ButtonStyle.Round" Color="Color.Primary">查看</Button>
+                    </div>
+                    <div class="col-4 col-sm-3 col-md-2 col-lg-auto">
+                        <Button ButtonStyle="ButtonStyle.Round" Color="Color.Danger">删除</Button>
+                    </div>
+                </Template>
+            </TableColumn>
+        </TableColumns>
+    </Table>
+</div>

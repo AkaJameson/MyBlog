@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MyBlog.Web.Client.Api;
+using MyBlog.Web.Client.Api.Identity;
 namespace MyBlog.Web.Client
 {
     public class Program
@@ -12,6 +14,9 @@ namespace MyBlog.Web.Client
             builder.RootComponents.Add<HeadOutlet>("head::after");
             builder.Services.AddBootstrapBlazor();
             builder.Services.AddTransient<CredentialsHandler>();
+            builder.Services.AddSingleton<Session>();
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             var apiAddress = builder.Configuration.GetValue<string>("ApiAddress");
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiAddress) });
             builder.Services.AddHttpClient("client", client =>

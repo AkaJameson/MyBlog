@@ -42,11 +42,11 @@ namespace MyBlog.Services.ServicesImpl
             }
             var account = _configuration.GetSection("Credentials").GetValue<string>("Account");
             var password = _configuration.GetSection("Credentials").GetValue<string>("Password");
-            if (string.IsNullOrEmpty(account) ||string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(password))
             {
                 return OperateResult.Failed<LoginInfo>("登录失败，请联系管理员");
             }
-            if ( account != loginModel.Account ||password != loginModel.Password)
+            if (account != loginModel.Account || password != loginModel.Password)
             {
                 return OperateResult.Failed<LoginInfo>("登录失败，密码错误");
             }
@@ -54,7 +54,7 @@ namespace MyBlog.Services.ServicesImpl
             {
                 new Claim(ClaimTypes.Name, loginModel.Account),
                 new Claim(ClaimTypes.Role, "Admin"),
-
+                new Claim("Stamp",DateTimeOffset.Now.ToUnixTimeSeconds().ToString())
             };
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
@@ -75,7 +75,7 @@ namespace MyBlog.Services.ServicesImpl
                 Expires = DateTime.Now.AddMinutes(int.Parse(jwtSettings["ExpiryMinutes"])),
                 SameSite = SameSiteMode.Lax
             });
-            return OperateResult.Successed(new LoginInfo() { Account = loginModel.Account });
+            return OperateResult.Successed(new LoginInfo() { Account = loginModel.Account, Expired = tokenDescriptor.Expires.Value });
         }
         /// <summary>
         /// 登出
