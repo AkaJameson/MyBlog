@@ -1,4 +1,31 @@
-﻿.container
-{
-    width:100%;
+﻿/* 页面外壳 */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 表格滚动区域 */
+.table-area {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 60vh; 
+    padding-bottom: 1rem;
+}
+
+/* 分页栏固定在下方 */
+.pegination {
+    background-color: #fff;
+    padding: 1rem 0;
+    border-top: 1px solid #ddd;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
 }

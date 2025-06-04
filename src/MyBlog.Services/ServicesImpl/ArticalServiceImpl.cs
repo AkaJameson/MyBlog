@@ -120,7 +120,7 @@ namespace MyBlog.Services.ServicesImpl
             }
             return OperateResult.Successed<ArticleInfo>(new ArticleInfo
             {
-                CategoryName =article.Category.CategoryName,
+                CategoryName = article.Category.CategoryName,
                 CategroyId = article.CategoryId,
                 Content = article.Content,
                 CreateTime = article.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
@@ -142,14 +142,16 @@ namespace MyBlog.Services.ServicesImpl
             }
             var start = articleQuery?.StartTime == null ? DateTime.MinValue : DateTime.TryParse(articleQuery.StartTime, out DateTime startTime) ? startTime : DateTime.MinValue;
             var end = articleQuery?.EndTime == null ? DateTime.MaxValue : DateTime.TryParse(articleQuery.EndTime, out DateTime endTime) ? endTime : DateTime.MaxValue;
-            var query = _unitOfWork.GetRepository<Article>().Where(p => p.CreatedDate >= start && p.CreatedDate <= end);
+            var query = _unitOfWork.GetRepository<Article>().AsNoTracking()
+                        .Include(p => p.Category)
+                        .Where(p => p.CreatedDate >= start && p.CreatedDate <= end);
             if (!string.IsNullOrWhiteSpace(articleQuery?.Title))
             {
                 query = query.Where(p => p.Title.Contains(articleQuery.Title));
             }
-            if (articleQuery?.CategoryId.HasValue == true)
+            if (!string.IsNullOrEmpty(articleQuery?.CategoryName))
             {
-                query = query.Where(p => p.CategoryId == articleQuery.CategoryId.Value);
+                query = query.Where(p => p.Category.CategoryName.Contains(articleQuery.CategoryName));
             }
             if (articleQuery?.IsPublished == true)
             {
@@ -190,14 +192,16 @@ namespace MyBlog.Services.ServicesImpl
             }
             var start = articleQuery?.StartTime == null ? DateTime.MinValue : DateTime.TryParse(articleQuery.StartTime, out DateTime startTime) ? startTime : DateTime.MinValue;
             var end = articleQuery?.EndTime == null ? DateTime.MaxValue : DateTime.TryParse(articleQuery.EndTime, out DateTime endTime) ? endTime : DateTime.MaxValue;
-            var query = _unitOfWork.GetRepository<Article>().Where(p => p.CreatedDate >= start && p.CreatedDate <= end);
+            var query = _unitOfWork.GetRepository<Article>().AsNoTracking()
+                        .Include(p => p.Category)
+                        .Where(p => p.CreatedDate >= start && p.CreatedDate <= end);
             if (!string.IsNullOrWhiteSpace(articleQuery?.Title))
             {
                 query = query.Where(p => p.Title.Contains(articleQuery.Title));
             }
-            if (articleQuery?.CategoryId.HasValue == true)
+            if (!string.IsNullOrEmpty(articleQuery?.CategoryName))
             {
-                query = query.Where(p => p.CategoryId == articleQuery.CategoryId.Value);
+                query = query.Where(p => p.Category.CategoryName.Contains(articleQuery.CategoryName));
             }
             if (articleQuery?.IsPublished == true)
             {

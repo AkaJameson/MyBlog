@@ -2,27 +2,74 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @layout MainLayout
-<div class="container">
-    <Table TItem="Blog"
-           PageItemsSource="new int[]{10,20,50}"
-           IsStriped="true" IsBordered="true"
-           ShowToolbar="true" ShowSkeleton="true" IsPagination="true"
-           IsMultipleSelect="true" OnQueryAsync="@OnQueryAsync" ShowDefaultButtons="false">
-        <TableColumns>
-            <TableColumn @bind-Field="context.Title" Text="标题"></TableColumn>
-            <TableColumn @bind-Field="context.CategoryName" Text="分类"></TableColumn>
-            <TableColumn @bind-Field="context.CreateTime" Text="创建时间"></TableColumn>
-            <TableColumn @bind-Field="context.views" Text="浏览数"></TableColumn>
-            <TableColumn @bind-Field="context.Id" Text="操作">
-                <Template Context="value">
-                    <div class="col4 col-4 col-sm-3 col-md-2 col-lg-auto mx4">
-                        <Button ButtonStyle="ButtonStyle.Round" Color="Color.Primary">查看</Button>
-                    </div>
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-auto">
-                        <Button ButtonStyle="ButtonStyle.Round" Color="Color.Danger">删除</Button>
-                    </div>
-                </Template>
-            </TableColumn>
-        </TableColumns>
-    </Table>
+
+<div class="container d-flex flex-column" style="height:auto">
+    <!-- 查询区域 -->
+    <GroupBox Title="查询" class="mb-3">
+        <div style="display:flex;flex-direction:row;">
+            <div class="search-box row g-5">
+                <div class="col-md-2">
+                    <div>分类:</div>
+                    <BootstrapInput Text="@CategoryName" Placeholder="请输入分类名" @bind-Value="CategoryName" />
+                </div>
+                <div class="col-md-2">
+                    <div>标题:</div>
+                    <BootstrapInput Text="@Title" Placeholder="请输入标题" @bind-Value="Title" />
+                </div>
+                <div class="col-md-2">
+                    <div>开始时间:</div>
+                    <DateTimePicker ShowLabel="false" Placeholder="开始时间" ViewMode="DatePickerViewMode.Date" @bind-Value="StartTime" />
+                </div>
+                <div class="col-md-2">
+                    <div>结束时间:</div>
+                    <DateTimePicker ShowLabel="false" Placeholder="结束时间" ViewMode="DatePickerViewMode.Date" @bind-Value="EndTime" />
+                </div>
+                <div class="col-md-2">
+                    <div>状态:</div>
+                    <Select @bind-Value="Status" Items="StatusOptions" />
+                </div>
+            </div>
+            <div style="width: 5rem; height: 3rem; display: flex; align-items: center; justify-content: center;">
+                <Button Color="Color.Primary" OnClick="QueryBlogAsync">查询</Button>
+            </div>
+        </div>
+    </GroupBox>
+
+    <!-- 表格区域 -->
+    <div class="flex-grow-1 overflow-auto min-height:600px ">
+        <Table TItem="Blog"
+               IsStriped="true" IsBordered="true"
+               ShowToolbar="false" ShowSkeleton="true" IsPagination="false"
+               IsMultipleSelect="true" Items="Blogs" ShowDefaultButtons="false">
+            <TableColumns>
+                <TableColumn @bind-Field="context.Title" Text="标题" />
+                <TableColumn @bind-Field="context.CategoryName" Text="分类" />
+                <TableColumn @bind-Field="context.CreateTime" Text="创建时间" />
+                <TableColumn @bind-Field="context.views" Text="浏览数" />
+                <TableColumn @bind-Field="context.Id" Text="操作">
+                    <Template Context="value">
+                        <div class="d-flex gap-2">
+                            <Button ButtonStyle="ButtonStyle.Round" Color="Color.Primary" @onclick="@(() => OpenPost(value.Value))">查看</Button>
+                            <Button ButtonStyle="ButtonStyle.Round" Color="Color.Danger" @onclick="@(() => DeletePost(value.Value))">删除</Button>
+                        </div>
+                    </Template>
+                </TableColumn>
+            </TableColumns>
+        </Table>
+    </div>
+
+    <div class="pegination sticky-bottom bg-white pt-3">
+        <Pagination PageCount="@PageCount"
+                    PageIndex="@PageIndex"
+                    ShowPageInfo="true"
+                    ShowGotoNavigator="true"
+                    OnPageLinkClick="OnPageLinkClick">
+            <PageInfoTemplate>
+                <div class="page-info me-2">@PageInfoText</div>
+                <Select @bind-Value="PageSizeStr"
+                        Items="PageSizeOptions"
+                        OnSelectedItemChanged="OnPageSizeChanged" />
+            </PageInfoTemplate>
+        </Pagination>
+    </div>
 </div>

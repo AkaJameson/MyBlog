@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -14,8 +15,8 @@ namespace MyBlog.Web.Client
             builder.RootComponents.Add<HeadOutlet>("head::after");
             builder.Services.AddBootstrapBlazor();
             builder.Services.AddTransient<CredentialsHandler>();
-            builder.Services.AddSingleton<Session>();
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddBlazoredLocalStorageAsSingleton();
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             var apiAddress = builder.Configuration.GetValue<string>("ApiAddress");
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiAddress) });

@@ -1,29 +1,31 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
 namespace MyBlog.Web.Client.Api.Identity
 {
     public class ApiAuthenticationStateProvider : AuthenticationStateProvider
     {
-        private readonly Session _session;
-        public ApiAuthenticationStateProvider(Session session)
+        private readonly ILocalStorageService localStorageService;
+        public ApiAuthenticationStateProvider(ILocalStorageService session)
         {
-            _session = session;
+            localStorageService = session;
         }
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            if (!_session.IsAuthenticated)
+            var _session = await localStorageService.GetItemAsync<Session>("identity");
+            if (_session == null || !_session.IsAuthenticated)
             {
                 var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
-                return Task.FromResult(new AuthenticationState(anonymousUser));
+                return new AuthenticationState(anonymousUser);
             }
             var identity = new ClaimsIdentity(new[]
             {
                   new Claim(ClaimTypes.Name, _session.userName)
             }, "apiauth");
 
-            return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(
-              new ClaimsIdentity(identity))));
+            return new AuthenticationState(new ClaimsPrincipal(
+              new ClaimsIdentity(identity)));
         }
         public void NotifyUserAuthentication()
         {
