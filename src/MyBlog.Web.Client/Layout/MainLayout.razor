@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using MyBlog.Web.Client.Api.Apis
+@inherits LayoutComponentBase
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -8,7 +9,9 @@
         <div class="top-row px-4">
             <Logout ImageUrl="images/Avater.png" DisplayName="Administrators" UserName="Admin">
                 <LinkTemplate>
-                    <LogoutLink Url="/logouts" onclick="" />
+                    <a href="#" @onclick="Logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>  <span> 退出</span>
+                    </a>
                 </LinkTemplate>
             </Logout>
             <div style="height: 220px;"></div>
@@ -19,3 +22,14 @@
         </article>
     </main>
 </div>
+@code{
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    [Inject]
+    private LoginApiService LoginApiService { get; set; }
+    protected async Task Logout()
+    {
+        await LoginApiService.LogoutAsync();
+        NavigationManager.NavigateTo("/");
+    }
+}
