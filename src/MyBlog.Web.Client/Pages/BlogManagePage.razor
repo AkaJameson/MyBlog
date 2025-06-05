@@ -3,40 +3,39 @@
 @attribute [Authorize]
 @layout MainLayout
 
-<div class="container d-flex flex-column" style="height:auto">
-    <!-- 查询区域 -->
+<div class="container">
     <GroupBox Title="查询" class="mb-3">
-        <div style="display:flex;flex-direction:row;">
-            <div class="search-box row g-5">
-                <div class="col-md-2">
+        <div class="search">
+            <div class="search-box ">
+                <div>
                     <div>分类:</div>
                     <BootstrapInput Text="@CategoryName" Placeholder="请输入分类名" @bind-Value="CategoryName" />
                 </div>
-                <div class="col-md-2">
+                <div>
                     <div>标题:</div>
                     <BootstrapInput Text="@Title" Placeholder="请输入标题" @bind-Value="Title" />
                 </div>
-                <div class="col-md-2">
+                <div>
                     <div>开始时间:</div>
                     <DateTimePicker ShowLabel="false" Placeholder="开始时间" ViewMode="DatePickerViewMode.Date" @bind-Value="StartTime" />
                 </div>
-                <div class="col-md-2">
+                <div>
                     <div>结束时间:</div>
                     <DateTimePicker ShowLabel="false" Placeholder="结束时间" ViewMode="DatePickerViewMode.Date" @bind-Value="EndTime" />
                 </div>
-                <div class="col-md-2">
+                <div>
                     <div>状态:</div>
-                    <Select @bind-Value="Status" Items="StatusOptions" />
+                    <Select style="width:6rem" @bind-Value="Status" Items="StatusOptions" />
                 </div>
             </div>
-            <div style="width: 5rem; height: 3rem; display: flex; align-items: center; justify-content: center;">
+            <div>
+                <div style="visibility:hidden">占位</div>
                 <Button Color="Color.Primary" OnClick="QueryBlogAsync">查询</Button>
             </div>
         </div>
     </GroupBox>
 
-    <!-- 表格区域 -->
-    <div class="flex-grow-1 overflow-auto min-height:600px ">
+    <div class="search-list">
         <Table TItem="Blog"
                IsStriped="true" IsBordered="true"
                ShowToolbar="false" ShowSkeleton="true" IsPagination="false"
@@ -58,7 +57,7 @@
         </Table>
     </div>
 
-    <div class="pegination sticky-bottom bg-white pt-3">
+    <div class="pegination">
         <Pagination PageCount="@PageCount"
                     PageIndex="@PageIndex"
                     ShowPageInfo="true"
