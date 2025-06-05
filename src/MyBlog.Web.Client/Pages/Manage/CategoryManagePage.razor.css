@@ -1,0 +1,26 @@
+﻿
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.search-list {
+    flex: 1;
+}
+
+.Modal {
+    display: flex;
+    gap: 20px;
+    justify-content:space-between;
+}
+
+.pegination {
+    background-color: #fff;
+    padding: 1rem 0;
+    border-top: 1px solid #ddd;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}

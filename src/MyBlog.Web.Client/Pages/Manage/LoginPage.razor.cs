@@ -6,7 +6,7 @@ using MyBlog.Web.Client.Api.Apis;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MyBlog.Web.Client.Pages
+namespace MyBlog.Web.Client.Pages.Manage
 {
     public partial class LoginPage
     {

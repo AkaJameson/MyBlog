@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using MyBlog.Web.Client.Api.Apis;
 
-namespace MyBlog.Web.Client.Pages
+namespace MyBlog.Web.Client.Pages.Manage
 {
     public partial class BlogManagePage
     {

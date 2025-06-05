@@ -1,0 +1,84 @@
+﻿@page "/category"
+@using Microsoft.AspNetCore.Authorization
+@using MyBlog.Models.Dto
+@attribute [Authorize]
+@layout MainLayout
+<div class="container">
+    <div class="search-list">
+        <Table TItem="CategoryInfo"
+               IsStriped="true" IsBordered="true"
+               ShowSkeleton="true" IsPagination="false"
+               IsMultipleSelect="true" Items="Categories" ShowDefaultButtons="false" ShowToolbar="true">
+            <TableToolbarBeforeTemplate>
+                <TableToolbarComponent>
+                    <Button Text="添加" Icon="fa-fw fa-solid fa-floppy-disk" @onclick="@(() => AddModalRef.Toggle())"></Button>
+                    <Modal IsBackdrop="true" @ref="@AddModalRef" OnCloseAsync="@OnDialogClosed">
+                        <ModalDialog Title="添加分类">
+                            <BodyTemplate>
+                                <div>
+                                    <span>分类名称：</span>
+                                    <div class="Modal">
+                                        <BootstrapInput TValue="string" IsTrim="true" IsClearable="true" PlaceHolder="请输入分类名称" @bind-Value="@CategoryName"></BootstrapInput>
+                                        <div>
+                                            <Button style="height:3rem;width:5rem;" ButtonStyle="ButtonStyle.Round"
+                                                    Color="Color.Primary"
+                                                    @onclick="@AddCategory">
+                                                添加
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </BodyTemplate>
+                        </ModalDialog>
+                    </Modal>
+                </TableToolbarComponent>
+            </TableToolbarBeforeTemplate>
+            <TableColumns>
+                <TableColumn @bind-Field="context.CategoryName" Text="分类" />
+                <TableColumn @bind-Field="context.CreateTime" Text="创建时间" />
+                <TableColumn @bind-Field="context.Id" Text="操作">
+                    <Template Context="value">
+                        <div class="d-flex gap-2">
+                            <Button ButtonStyle="ButtonStyle.Round" Color="Color.Primary" @onclick="@(() => ModalRef.Toggle())">修改</Button>
+                            <Modal IsBackdrop="true" @ref="@ModalRef">
+                                <ModalDialog Title="修改分类" OnCloseAsync="@OnDialogClosed">
+                                    <BodyTemplate>
+                                        <div>
+                                            <span>修改分类名称：</span>
+                                            <div class="Modal">
+                                                <BootstrapInput  TValue="string" IsTrim="true" IsClearable="true" PlaceHolder="请输入分类名称" @bind-Value="@CategoryName"></BootstrapInput>
+                                                <div>
+                                                    <Button style="height:3rem;width:5rem;" ButtonStyle="ButtonStyle.Round"
+                                                            Color="Color.Primary"
+                                                            @onclick="@AddCategory">
+                                                        添加
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </BodyTemplate>
+                                </ModalDialog>
+                            </Modal>
+                            <Button ButtonStyle="ButtonStyle.Round" Color="Color.Danger" @onclick="@(() => DeleteCategory(value.Value))">删除</Button>
+                        </div>
+                    </Template>
+                </TableColumn>
+            </TableColumns>
+        </Table>
+    </div>
+
+    <div class="pegination">
+        <Pagination PageCount="@PageCount"
+                    PageIndex="@PageIndex"
+                    ShowPageInfo="true"
+                    ShowGotoNavigator="true"
+                    OnPageLinkClick="OnPageLinkClick">
+            <PageInfoTemplate>
+                <div class="page-info me-2">@PageInfoText</div>
+                <Select @bind-Value="PageSizeStr"
+                        Items="PageSizeOptions"
+                        OnSelectedItemChanged="OnPageSizeChanged" />
+            </PageInfoTemplate>
+        </Pagination>
+    </div>
+</div>
