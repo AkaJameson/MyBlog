@@ -59,7 +59,7 @@
                                     </BodyTemplate>
                                 </ModalDialog>
                             </Modal>
-                            <Button ButtonStyle="ButtonStyle.Round" Color="Color.Danger" @onclick="@(() => DeleteCategory(value.Value))">删除</Button>
+                            <PopConfirmButton ButtonStyle="ButtonStyle.Round" Color="Color.Danger" OnConfirm="@(() => DeleteCategory(value.Value))">删除</PopConfirmButton>
                         </div>
                     </Template>
                 </TableColumn>

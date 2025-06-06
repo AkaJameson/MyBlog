@@ -73,7 +73,7 @@ namespace MyBlog.WebApi.Controllers
             return await _articleService.QueryArticle(articleQuery);
         }
 
-        [HttpPost("garbage")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult<ArticleDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "查询回收站文章", Description = "查询已删除的文章列表")]
@@ -87,7 +87,7 @@ namespace MyBlog.WebApi.Controllers
             return await _articleService.QueryGarbageArticle(articleQuery);
         }
 
-        [HttpGet("recover")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "恢复文章", Description = "从回收站恢复指定文章")]

@@ -1,0 +1,32 @@
+﻿
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+    .container .search {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .container .search .search-box {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+        }
+
+.search-list {
+    flex: 1;
+}
+
+.pegination {
+    background-color: #fff;
+    padding: 1rem 0;
+    border-top: 1px solid #ddd;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}

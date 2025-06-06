@@ -235,12 +235,13 @@ namespace MyBlog.Services.ServicesImpl
         /// <returns></returns>
         public async Task<OperateResult> RecoverArticle(int id)
         {
-            var article = await _unitOfWork.GetRepository<Article>().GetByIdAsync(id);
+            var article = await _unitOfWork.GetRepository<Article>().AsNoTracking().Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
             if (article == null)
             {
                 return OperateResult.Failed("文章不存在");
             }
             article.IsDeleted = false;
+            article.IsPublished = false;
             await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
             await _unitOfWork.CommitAsync();
             return OperateResult.Successed();

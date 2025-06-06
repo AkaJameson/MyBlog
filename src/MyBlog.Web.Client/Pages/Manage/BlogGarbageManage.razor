@@ -1,5 +1,73 @@
-﻿<h3>BlogGarbageManage</h3>
+﻿@page "/garbages"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@layout MainLayout
 
-@code {
+<div class="container">
+    <GroupBox Title="查询" class="mb-3">
+        <div class="search">
+            <div class="search-box ">
+                <div>
+                    <div>分类:</div>
+                    <BootstrapInput Text="@CategoryName" Placeholder="请输入分类名" @bind-Value="CategoryName" />
+                </div>
+                <div>
+                    <div>标题:</div>
+                    <BootstrapInput Text="@Title" Placeholder="请输入标题" @bind-Value="Title" />
+                </div>
+                <div>
+                    <div>开始时间:</div>
+                    <DateTimePicker ShowLabel="false" Placeholder="开始时间" ViewMode="DatePickerViewMode.Date" @bind-Value="StartTime" />
+                </div>
+                <div>
+                    <div>结束时间:</div>
+                    <DateTimePicker ShowLabel="false" Placeholder="结束时间" ViewMode="DatePickerViewMode.Date" @bind-Value="EndTime" />
+                </div>
+                <div>
+                    <div>状态:</div>
+                    <Select style="width:6rem" @bind-Value="Status" Items="StatusOptions" />
+                </div>
+            </div>
+            <div>
+                <div style="visibility:hidden">占位</div>
+                <Button Color="Color.Primary" OnClick="QueryBlogAsync">查询</Button>
+            </div>
+        </div>
+    </GroupBox>
 
-}
+    <div class="search-list">
+        <Table TItem="Blog"
+               IsStriped="true" IsBordered="true"
+               ShowToolbar="false" ShowSkeleton="true" IsPagination="false"
+               IsMultipleSelect="true" Items="Blogs" ShowDefaultButtons="false">
+            <TableColumns>
+                <TableColumn @bind-Field="context.Title" Text="标题" />
+                <TableColumn @bind-Field="context.CategoryName" Text="分类" />
+                <TableColumn @bind-Field="context.CreateTime" Text="创建时间" />
+                <TableColumn @bind-Field="context.views" Text="浏览数" />
+                <TableColumn @bind-Field="context.Id" Text="操作">
+                    <Template Context="value">
+                        <div class="d-flex gap-2">
+                            <PopConfirmButton ButtonStyle="ButtonStyle.Round" Color="Color.Primary" OnConfirm="@(() => RecoverPost(value.Value))">恢复</PopConfirmButton>
+                        </div>
+                    </Template>
+                </TableColumn>
+            </TableColumns>
+        </Table>
+    </div>
+
+    <div class="pegination">
+        <Pagination PageCount="@PageCount"
+                    PageIndex="@PageIndex"
+                    ShowPageInfo="true"
+                    ShowGotoNavigator="true"
+                    OnPageLinkClick="OnPageLinkClick">
+            <PageInfoTemplate>
+                <div class="page-info me-2">@PageInfoText</div>
+                <Select @bind-Value="PageSizeStr"
+                        Items="PageSizeOptions"
+                        OnSelectedItemChanged="OnPageSizeChanged" />
+            </PageInfoTemplate>
+        </Pagination>
+    </div>
+</div>

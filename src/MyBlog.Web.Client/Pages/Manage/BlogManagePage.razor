@@ -49,7 +49,8 @@
                     <Template Context="value">
                         <div class="d-flex gap-2">
                             <Button ButtonStyle="ButtonStyle.Round" Color="Color.Primary" @onclick="@(() => OpenPost(value.Value))">查看</Button>
-                            <Button ButtonStyle="ButtonStyle.Round" Color="Color.Danger" @onclick="@(() => DeletePost(value.Value))">删除</Button>
+                            <PopConfirmButton Text="删除"
+                                              Content="确定删除数据吗？" ButtonStyle="ButtonStyle.Round" Color="Color.Danger" OnConfirm="@(() => DeletePost(value.Value))">删除</PopConfirmButton>
                         </div>
                     </Template>
                 </TableColumn>
