@@ -127,6 +127,7 @@ namespace MyBlog.Services.ServicesImpl
                 Id = article.Id,
                 Title = article.Title,
                 views = article.Views,
+                IsPublished = article.IsPublished,
             });
         }
         /// <summary>
@@ -171,6 +172,7 @@ namespace MyBlog.Services.ServicesImpl
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 Content = p.Content,
                 views = p.Views,
+                IsPublished = p.IsPublished,
             }).ToListAsync();
             return OperateResult.Successed<ArticleDto>(new ArticleDto
             {
@@ -221,6 +223,7 @@ namespace MyBlog.Services.ServicesImpl
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 Content = p.Content,
                 views = p.Views,
+                IsPublished = p.IsPublished,
             }).ToListAsync();
             return OperateResult.Successed<ArticleDto>(new ArticleDto
             {

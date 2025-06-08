@@ -1,4 +1,5 @@
-﻿using MyBlog.DataAccessor.EFCore;
+﻿using Microsoft.EntityFrameworkCore;
+using MyBlog.DataAccessor.EFCore;
 using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Models.Data;
 using MyBlog.Models.Dto;
@@ -111,5 +112,21 @@ namespace MyBlog.Services.ServicesImpl
             }
 
         }
+
+        public async Task<OperateResult<List<CategoryInfo>>> GetCategoryList()
+        {
+            var categorys = await _unitOfWork.GetRepository<Category>()
+                .Where(p => !p.IsDeleted)
+                .Select(p=>new CategoryInfo
+                {
+                    CategoryName = p.CategoryName,
+                    Id = p.Id,
+                    CreateTime = p.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                }).ToListAsync();
+            return OperateResult.Successed(categorys);
+
+        }
+       
+
     }
 }

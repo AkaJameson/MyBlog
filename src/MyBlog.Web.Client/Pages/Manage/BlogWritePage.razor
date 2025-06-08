@@ -1,0 +1,44 @@
+﻿@page "/write"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@layout MainLayout
+<div class="container">
+    <h3 style="margin-right:auto;padding-left:10px;background-color:#e5eef7;width:100%;"> 添加随笔</h3>
+    <ValidateForm @ref="_form" class="form-group" Model="@Model" ShowLabel="false">
+        <div class="item">
+            <div>标题:</div>
+            <div>
+                <BootstrapInput EnableHighlight="true" PlaceHolder="请输入标题" @bind-Value="Model.Title" />
+            </div>
+        </div>
+       <div class="item fill">
+            <div>内容:</div>
+            <div style="width: 100%;">
+                <Markdown Height="800" MinHeight="600"  PreviewStyle="PreviewStyle.Tab" @bind-Value="@Model.Content" />
+            </div>
+       </div>
+        <div class="item">
+            <div>分类:</div>
+            <div>
+                <Select TItem="CategoryInfo" TValue="int"
+                        Items="@_categories"
+                        TextProperty="CategoryName"
+                        ValueProperty="Id"
+                        @bind-Value="Model.CategoryId"
+                        ShowSearch="true"
+                        PlaceHolder="请选择分类" />
+            </div>
+        </div>
+
+        <div class="item">
+            <div>是否发布:</div>
+            <div>
+                <RadioList TValue="bool" @bind-Value="Model.IsPublished" Items="@publishStatus" IsVertical="true" />
+            </div>
+        </div>
+
+        <div class="item">
+            <Button Icon="fa fa-check" Text="提交" OnClick="HandleValidSubmit" Color="Color.Primary" />
+        </div>
+    </ValidateForm>
+</div>

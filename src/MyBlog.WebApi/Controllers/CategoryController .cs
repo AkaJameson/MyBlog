@@ -5,6 +5,7 @@ using MyBlog.Models.Models;
 using MyBlog.Services.Services;
 using MyBlog.Utilites;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 
 namespace MyBlog.WebApi.Controllers
 {
@@ -71,6 +72,18 @@ namespace MyBlog.WebApi.Controllers
                 return OperateResult.Failed("无效的分类数据");
             }
             return await _categoryService.UpdateCategory(category);
+        }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<OperateResult<List<CategoryInfo>>> GetAllCategory()
+        {
+            if (!ModelState.IsValid)
+            {
+                return OperateResult.Failed<List<CategoryInfo>>("无效的分类数据");
+            }
+            return await _categoryService.GetCategoryList();
         }
     }
 }

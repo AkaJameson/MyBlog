@@ -8,6 +8,7 @@
     public class ArticleInfo
     {
         public int Id { get; set; }
+        public bool IsPublished { get; set; }
         /// <summary>
         /// 文章Id
         /// </summary>

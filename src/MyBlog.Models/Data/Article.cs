@@ -12,6 +12,7 @@ namespace MyBlog.Models.Data
         [Required]
         public string Title { get; set; }
         [Required]
+        [Column(TypeName = "LONGTEXT")]
         public string Content { get; set; }
         [DefaultValue(0)]
         public int Views { get; set; } = 0;

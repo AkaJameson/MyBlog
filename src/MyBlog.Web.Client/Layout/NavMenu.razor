@@ -1,21 +1,28 @@
-﻿﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">MyBlog</a>
+﻿@inherits LayoutComponentBase
+
+<div class="sidebar @(IsCollapsed ? "collapsed" : "expanded")">
+    <div class="top-row ps-3 navbar navbar-dark">
+        <div class="container-fluid">
+            <a class="@(!IsCollapsed ? "navbar-brand" : "navbar-brand collapsed")" href="">我的博客</a>
+        </div>
     </div>
-</div>
 
-<input type="checkbox" title="文章后台管理" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
+    <nav class="flex-column nav-scrollable">
         @foreach (var item in NavItems)
         {
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="@item.Herf.Trim('/')">
                     <i class="@item.Icon"></i>
-                    <span style="margin-left: 1rem;">@item.Text</span>
+                    <span class="nav-text">@item.Text</span>
                 </NavLink>
             </div>
         }
     </nav>
+
+    <div class="collapse-button-area">
+        <button class="collapse-toggle" @onclick="ToggleSidebar" title="点击折叠/展开">
+            <i class="fa-solid @(IsCollapsed ? "fa-arrow-right" : "fa-arrow-left")"></i>
+        </button>
+        <div class="collapse-hint">@(!IsCollapsed ? "点击折叠" : "点击展开")</div>
+    </div>
 </div>

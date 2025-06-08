@@ -41,5 +41,11 @@ namespace MyBlog.Web.Client.Api.Apis
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<OperateResult>();
         }
+        public async Task<OperateResult<List<CategoryInfo>>> GetCategoryListAsync()
+        {
+            var response = await _httpClient.GetAsync("/api/Category/GetAllCategory");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<OperateResult<List<CategoryInfo>>>();
+        }
     }
 }

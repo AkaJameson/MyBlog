@@ -10,5 +10,6 @@ namespace MyBlog.Services.Services
         Task<OperateResult> DeleteCategory(int id);
         Task<OperateResult<CategoryDto>> QueryCategory(CategoryQuery query);
         Task<OperateResult> UpdateCategory(CategoryEdit category);
+        Task<OperateResult<List<CategoryInfo>>> GetCategoryList();
     }
 }

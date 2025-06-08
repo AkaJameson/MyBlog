@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using MyBlog.Web.Client.Api.Apis;
+using System.Text.Json;
+using System.Web;
 
 namespace MyBlog.Web.Client.Pages.Manage
 {
@@ -11,6 +13,8 @@ namespace MyBlog.Web.Client.Pages.Manage
         private ArticleApiService ArticleApiService { get; set; }
         [Inject]
         private MessageService MessageService { get; set; }
+        [Inject]
+        private NavigationManager NavigationManager { get; set; }
         private List<Blog> Blogs { get; set; } = new List<Blog>();
         private string? CategoryName { get; set; }
         private DateTime? StartTime { get; set; }
@@ -80,6 +84,7 @@ namespace MyBlog.Web.Client.Pages.Manage
                     views = p.views,
                     Id = p.Id,
                 }).ToList();
+                StateHasChanged();
 
             }
             else
@@ -99,7 +104,31 @@ namespace MyBlog.Web.Client.Pages.Manage
         /// <returns></returns>
         protected async Task OpenPost(int id)
         {
+           var result =  await ArticleApiService.QuerySingleArticle(id, true);
+            if (result.Code == 200)
+            {
+                var article = result.Data;
+                var model = new BlogWriteModel
+                {
+                    Title = article.Title,
+                    Content = article.Content,
+                    CategoryId = article.CategroyId,
+                    IsPublished = article.IsPublished,
+                    Id = article.Id
+                };
 
+                var json = JsonSerializer.Serialize(model);
+                var encoded = HttpUtility.UrlEncode(json); // URL 编码 JSON
+                NavigationManager.NavigateTo($"/write?ModelJson={encoded}");
+            }
+            else
+            {
+                await MessageService.Show(new MessageOption
+                {
+                    Color = Color.Danger,
+                    Content = result.Message,
+                });
+            }
 
         }
         /// <summary>
