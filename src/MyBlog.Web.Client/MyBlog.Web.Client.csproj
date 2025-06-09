@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="Layout\ViewLayout.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.6" PrivateAssets="all" />
@@ -21,6 +25,18 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\MyBlog.Web.Client.Api\MyBlog.Web.Client.Api.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Layout\ViewLayout.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Layout\ViewLayout.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Layout\ViewLayout.razor" />
 	</ItemGroup>
 
 </Project>

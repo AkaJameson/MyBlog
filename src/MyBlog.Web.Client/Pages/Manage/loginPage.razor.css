@@ -6,10 +6,27 @@
     width: 100vw;
     height: 100vh;
     margin: 0;
-    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
+    .login .container {
+        width: 60%;
+        padding: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+        .login .container .component {
+            background-image: url("images/Component.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width:40rem;
+            display: block;
+        }
 
-    .login .login-form {
+    .login .container .login-form {
         border-radius: 10px;
         background-color: rgba(255,255,255,0.4);
         display: flex;
@@ -20,12 +37,9 @@
         justify-content: center;
         align-content: center;
         padding: 40px 30px;
-        position:absolute;
-        top: 16%;
-        left: 58%;
     }
 
-    .login .shortLine {
+    .login .container .shortLine {
         width: 60px;
         height: 10px;
         background-color: #4285f4;

@@ -1,0 +1,100 @@
+﻿@page "/thoughts"
+@using BootstrapBlazor.Components
+@using Microsoft.AspNetCore.Authorization
+@using MyBlog.Models.Dto
+@attribute [Authorize]
+@layout MainLayout
+
+<div class="container">
+    <Card class="mb-3">
+        <HeaderTemplate>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="mx-2">说说管理</span>
+                <Button Color="Color.Primary" OnClick="@(() => AddModalRef?.Toggle())">添加说说</Button>
+            </div>
+        </HeaderTemplate>
+        <BodyTemplate>
+            <div class="d-flex mb-3">
+                <Select TValue="string" @bind-Value="PageSizeStr" Items="@PageSizeOptions" OnSelectedItemChanged="@OnPageSizeChanged" />
+                <span class="ms-3 align-self-center">@PageInfoText</span>
+            </div>
+
+            <Table TItem="ThoughtInfo" Items="@Thoughts" IsBordered="true" IsPagination="false" IsStriped="true">
+                <TableColumns>
+                    <TableColumn @bind-Field="context.Id" Width="80" />
+                    <TableColumn @bind-Field="context.Content" />
+                    <TableColumn @bind-Field="context.PublishTime" />
+                    <TableColumn @bind-Field="context.Id">
+                        <Template Context="value">
+                            <div class="d-flex gap-2">
+                                <Button Color="Color.Primary" Size="Size.ExtraSmall"
+                                        OnClick="@(async () => {
+                                        ThoughtContent = context.Content;
+                                        CurrentThoughtId = context.Id;
+                                        ModalRef?.Toggle();
+                                    })">
+                                    编辑
+                                </Button>
+                                <Button Color="Color.Danger" Size="Size.ExtraSmall"
+                                        OnClick="@(async () => await DeleteThought(context.Id))">
+                                    删除
+                                </Button>
+                            </div>
+                        </Template>
+                    </TableColumn>
+                </TableColumns>
+            </Table>
+
+            <div class="d-flex justify-content-center mt-3">
+                <Pagination Value="@PageIndex" PageCount="@PageCount" OnPageLinkClick="@OnPageLinkClick" />
+            </div>
+        </BodyTemplate>
+    </Card>
+    <Modal @ref="@ModalRef">
+        <ModalDialog Title="编辑说说" IsCentered="true" Size="Size.Large">
+            <BodyTemplate>
+                <div class="mb-3">
+                    <Textarea Rows="5" Placeholder="请输入说说内容" @bind-Value="@ThoughtContent" />
+                </div>
+            </BodyTemplate>
+            <FooterTemplate>
+                <Button Color="Color.Secondary" OnClick="@(async () => {
+                    await OnDialogClosed();
+                    ModalRef.Toggle();
+                })">
+                    取消
+                </Button>
+                <Button Color="Color.Primary" OnClick="@(async () => {
+                    await UpdateThought(CurrentThoughtId);
+                    ModalRef.Toggle();
+                })">
+                    保存
+                </Button>
+            </FooterTemplate>
+        </ModalDialog>
+    </Modal>
+
+    <Modal @ref="@AddModalRef">
+        <ModalDialog Title="添加说说" IsCentered="true" Size="Size.Large">
+            <BodyTemplate>
+                <div class="mb-3">
+                    <Textarea Rows="5" Placeholder="请输入说说内容" @bind-Value="@ThoughtContent" />
+                </div>
+            </BodyTemplate>
+            <FooterTemplate>
+                <Button Color="Color.Secondary" OnClick="@(async () => {
+                    await OnDialogClosed();
+                    AddModalRef.Toggle();
+                })">
+                    取消
+                </Button>
+                <Button Color="Color.Primary" OnClick="@(async () => {
+                    await AddThought();
+                    AddModalRef.Toggle();
+                })">
+                    添加
+                </Button>
+            </FooterTemplate>
+        </ModalDialog>
+    </Modal>
+</div>
