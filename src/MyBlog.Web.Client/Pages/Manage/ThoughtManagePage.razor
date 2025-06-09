@@ -21,10 +21,9 @@
 
             <Table TItem="ThoughtInfo" Items="@Thoughts" IsBordered="true" IsPagination="false" IsStriped="true">
                 <TableColumns>
-                    <TableColumn @bind-Field="context.Id" Width="80" />
-                    <TableColumn @bind-Field="context.Content" />
-                    <TableColumn @bind-Field="context.PublishTime" />
-                    <TableColumn @bind-Field="context.Id">
+                    <TableColumn @bind-Field="context.Content" title="内容" />
+                    <TableColumn @bind-Field="context.PublishTime" title="发布时间" />
+                    <TableColumn @bind-Field="context.Id" title="操作">
                         <Template Context="value">
                             <div class="d-flex gap-2">
                                 <Button Color="Color.Primary" Size="Size.ExtraSmall"
