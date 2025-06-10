@@ -1,20 +1,14 @@
-﻿@* Navbar.razor *@
-<nav class="navbar">
+﻿<nav class="navbar">
     <div class="nav-container">
-        <a href="/" class="logo">我的博客</a>
-
         <div class="nav-main">
+            <div class="logo">
+                <h3>Jameson</h3>
+            </div>
             <div class="nav-links">
                 <a href="/" class="nav-link">首页</a>
-                <a href="/articles" class="nav-link">文章</a>
-                <a href="/thoughts" class="nav-link">碎碎念</a>
+                <a href="/views/articles" class="nav-link">文章</a>
+                <a href="/views/Rambling" class="nav-link">碎碎念</a>
                 <a href="/categories" class="nav-link">分类</a>
-                <a href="/about" class="nav-link">关于</a>
-            </div>
-
-            <div class="search-box">
-                <input type="text" placeholder="搜索文章..." />
-                <button><i class="fas fa-search"></i></button>
             </div>
         </div>
     </div>
@@ -28,6 +22,7 @@
         position: sticky;
         top: 0;
         z-index: 1000;
+        width:75%;
 
     }
 
@@ -41,17 +36,21 @@
         gap: 50px;
     }
 
-    .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #4361ee;
-       margin-left:auto;
-    }
-
     .nav-main {
         display: flex;
         align-items: center;
         gap: 30px;
+    }
+
+    .logo{
+        text-align:center;
+        color:wheat;
+        margin:auto 0;
+        transition: all 0.3s ease;
+    }
+    .logo:hover{
+        color:#d2b48c;
+        transform:translateX(10px);
     }
 
     .nav-links {
