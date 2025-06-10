@@ -51,7 +51,6 @@ namespace MyBlog.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult<ThoughtDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "查询说说", Description = "分页查询说说列表")]
-        [Authorize]
         public async Task<OperateResult<ThoughtDto>> QueryThoughts([FromBody] ThoughtQuery query)
         {
             if (!ModelState.IsValid)
@@ -79,7 +78,6 @@ namespace MyBlog.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult<List<ThoughtInfo>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "获取说说列表", Description = "获取所有说说（不分页）")]
-        [Authorize]
         public async Task<OperateResult<List<ThoughtInfo>>> GetThoughtList()
         {
             return await _thoughtService.GetThoughtListAsync();

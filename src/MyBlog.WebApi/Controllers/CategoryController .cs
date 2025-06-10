@@ -50,7 +50,6 @@ namespace MyBlog.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult<CategoryDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "查询分类", Description = "根据条件查询分类列表")]
-        [Authorize]
         public async Task<OperateResult<CategoryDto>> QueryCategory([FromBody] CategoryQuery query)
         {
             if (!ModelState.IsValid)
@@ -76,7 +75,6 @@ namespace MyBlog.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
         public async Task<OperateResult<List<CategoryInfo>>> GetAllCategory()
         {
             if (!ModelState.IsValid)

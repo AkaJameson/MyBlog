@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<div class=".front-layout">
+   <div class="fronter">
+        @Body
+   </div>
+</div>
+<style>
+    .front-layout {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .fronter {
+        flex: 1;
+        overflow-y: auto;
+        scrollbar-width: none; /* Firefox */
+    }
+
+        .fronter::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+</style>

@@ -15,11 +15,11 @@ main {
 .content {
     flex: 1;
     overflow-y: auto;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none; 
 }
 
     .content::-webkit-scrollbar {
-        display: none; /* Chrome, Safari */
+        display: none;
     }
 
 .sidebar {

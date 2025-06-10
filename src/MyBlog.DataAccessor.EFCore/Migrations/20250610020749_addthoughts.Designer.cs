@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyBlog.DataAccessor.EFCore;
 
@@ -11,9 +12,11 @@ using MyBlog.DataAccessor.EFCore;
 namespace MyBlog.DataAccessor.EFCore.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    partial class BlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250610020749_addthoughts")]
+    partial class addthoughts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

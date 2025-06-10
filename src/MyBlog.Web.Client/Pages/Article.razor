@@ -1,0 +1,53 @@
+﻿@page "/article/{id:int}"
+@using MyBlog.Web.Client.Shared
+@inherits ArticleBase
+
+<MyBlog.Web.Client.Shared.Navbar />
+
+@if (isLoading)
+{
+    <div class="loading">加载中...</div>
+}
+else if (article == null)
+{
+    <div class="error">文章未找到</div>
+}
+else
+{
+    <div class="article-container">
+        <div class="article-header">
+            <div class="breadcrumb">
+                <a href="/">首页</a> / 
+                <a href="/articles?category=@article.CategroyId">@article.CategoryName</a>
+            </div>
+            <h1>@article.Title</h1>
+            <div class="article-meta">
+                <div class="publish-time">发布于: @article.CreateTime</div>
+                <div class="views">阅读: @article.views</div>
+            </div>
+        </div>
+        
+        <div class="article-content">
+            @((MarkupString)article.Content)
+        </div>
+
+        <div class="article-footer">
+            <div class="share-buttons">
+                <button class="share-btn" @onclick="ShareToWeibo">
+                    <i class="fab fa-weibo"></i>
+                </button>
+                <button class="share-btn" @onclick="ShareToWechat">
+                    <i class="fab fa-weixin"></i>
+                </button>
+                <button class="share-btn" @onclick="ShareToTwitter">
+                    <i class="fab fa-twitter"></i>
+                </button>
+            </div>
+        </div>
+
+
+
+    </div>
+}
+
+<MyBlog.Web.Client.Shared.Footer />
