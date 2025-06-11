@@ -23,7 +23,7 @@ namespace MyBlog.Services.ServicesImpl
         /// <param name="category"></param>
         public async Task<OperateResult> AddCategory(CategoryAdd category)
         {
-            if (await _unitOfWork.GetRepository<Category>().ExistsAsync(c => c.CategoryName == category.CategoryName && !c.IsDeleted))
+            if (await _unitOfWork.GetRepository<Category>().ExistsAsync(c => c.CategoryName == category.CategoryName))
             {
                 return OperateResult.Failed("分类已存在");
             }
@@ -57,8 +57,8 @@ namespace MyBlog.Services.ServicesImpl
                 {
                     return OperateResult.Failed("分类下存在文章，不能删除");
                 }
-                category.IsDeleted = true;
-                await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+
+                await _unitOfWork.GetRepository<Category>().DeleteAsync(category);
                 await _unitOfWork.CommitAsync();
                 return OperateResult.Successed();
             }
@@ -71,7 +71,7 @@ namespace MyBlog.Services.ServicesImpl
         public async Task<OperateResult<CategoryDto>> QueryCategory(CategoryQuery query)
         {
             var categorys = await _unitOfWork.GetRepository<Category>()
-                                .GetPagedAsync(query.PageIndex, query.PageSize, p => !p.IsDeleted);
+                                .GetPagedAsync(query.PageIndex, query.PageSize);
             var result = new CategoryDto
             {
                 TotalCount = categorys.TotalCount,
@@ -85,7 +85,7 @@ namespace MyBlog.Services.ServicesImpl
             return OperateResult.Successed<CategoryDto>(result);
         }
         /// <summary>
-        /// 更新文章
+        /// 更新类型
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
@@ -98,7 +98,7 @@ namespace MyBlog.Services.ServicesImpl
             }
             else
             {
-                if (await _unitOfWork.GetRepository<Category>().ExistsAsync(c => c.CategoryName == category.CategoryName && c.Id != category.Id && !c.IsDeleted))
+                if (await _unitOfWork.GetRepository<Category>().ExistsAsync(c => c.CategoryName == category.CategoryName && c.Id != category.Id ))
                 {
                     return OperateResult.Failed("分类已存在");
                 }
@@ -115,8 +115,7 @@ namespace MyBlog.Services.ServicesImpl
 
         public async Task<OperateResult<List<CategoryInfo>>> GetCategoryList()
         {
-            var categorys = await _unitOfWork.GetRepository<Category>()
-                .Where(p => !p.IsDeleted)
+            var categorys = await _unitOfWork.GetRepository<Category>().AsNoTracking()
                 .Select(p=>new CategoryInfo
                 {
                     CategoryName = p.CategoryName,

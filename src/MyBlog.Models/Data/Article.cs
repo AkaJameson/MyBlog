@@ -19,11 +19,7 @@ namespace MyBlog.Models.Data
         public DateTime CreatedDate { get; set; }
         public DateTime? PublishDate { get; set; }
         public int CategoryId { get; set; }
-        public virtual Category Category { get; set; } = new Category
-        {
-            CategoryName = "默认",
-            IsDeleted = false
-        };
+        public virtual Category Category { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsPublished { get; set; }
     }

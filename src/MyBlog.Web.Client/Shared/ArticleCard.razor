@@ -1,18 +1,24 @@
 ﻿@using MyBlog.Models.Dto
+@using System.Diagnostics.CodeAnalysis
 <div class="article-card">
     <div class="article-category">@Article.CategoryName</div>
     <h3 class="article-title">@Article.Title</h3>
     <p class="article-excerpt">@GetExcerpt(Article.Content)</p>
+
     <div class="article-meta">
-        <span>@Article.CreateTime</span>
-        <span>·</span>
+        <span>posted @Article.CreateTime</span>
+        <span class="dot"></span>
+        <span>by Xin</span>
+        <span class="dot"></span>
         <span>@Article.views 阅读</span>
     </div>
-    <a href="/article/@Article.Id" class="article-link">阅读全文</a>
+
+    <a href="/article/@Article.Id" class="article-link">阅读全文 →</a>
 </div>
 
 @code {
     [Parameter]
+    [NotNull]
     public ArticleInfo Article { get; set; }
 
     private string GetExcerpt(string content)

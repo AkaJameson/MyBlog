@@ -126,5 +126,17 @@ namespace MyBlog.WebApi.Controllers
             }
             return await _articleService.QuerySingleArticle(id, addViews);
         }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "真删除", Description = "删除文章")]
+        public async Task<OperateResult> RealDelete([FromQuery] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return OperateResult.Failed<ArticleInfo>("无效的请求格式");
+            }
+            return await _articleService.RealDelete(id);
+        }
     }
 }

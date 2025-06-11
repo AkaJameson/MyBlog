@@ -5,6 +5,7 @@ using MyBlog.Models.Data;
 using MyBlog.Models.Dto;
 using MyBlog.Models.Models;
 using MyBlog.Services.Services;
+using MyBlog.Services.ServicesHelper;
 using MyBlog.Utilites;
 
 namespace MyBlog.Services.ServicesImpl
@@ -91,7 +92,7 @@ namespace MyBlog.Services.ServicesImpl
             }
             if (artical.CategoryId.HasValue)
             {
-                var category = await _unitOfWork.GetRepository<Category>().FirstOrDefaultAsync(p => !p.IsDeleted && p.Id == artical.CategoryId.Value);
+                var category = await _unitOfWork.GetRepository<Category>().FirstOrDefaultAsync(p => p.Id == artical.CategoryId.Value);
                 if (category == null)
                 {
                     return OperateResult.Failed("分类不存在");
@@ -170,7 +171,9 @@ namespace MyBlog.Services.ServicesImpl
                 CategoryName = p.Category.CategoryName,
                 CategroyId = p.CategoryId,
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                Content = p.Content,
+                Content = articleQuery.IsExcerpt
+                ? MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200)
+                : p.Content,
                 views = p.Views,
                 IsPublished = p.IsPublished,
             }).ToListAsync();
@@ -221,7 +224,9 @@ namespace MyBlog.Services.ServicesImpl
                 CategoryName = p.Category.CategoryName,
                 CategroyId = p.CategoryId,
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                Content = p.Content,
+                Content = articleQuery.IsExcerpt
+                ? MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200)
+                : p.Content,
                 views = p.Views,
                 IsPublished = p.IsPublished,
             }).ToListAsync();
@@ -244,9 +249,18 @@ namespace MyBlog.Services.ServicesImpl
                 return OperateResult.Failed("文章不存在");
             }
             article.IsDeleted = false;
-            article.IsPublished = false;
             await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
             await _unitOfWork.CommitAsync();
+            return OperateResult.Successed();
+        }
+        /// <summary>
+        /// 真删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<OperateResult> RealDelete(int id)
+        {
+            await _unitOfWork.GetRepository<Article>().DeleteAsync(id);
             return OperateResult.Successed();
         }
 

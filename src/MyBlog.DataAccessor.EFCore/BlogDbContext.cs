@@ -17,7 +17,11 @@ namespace MyBlog.DataAccessor.EFCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Article>().HasOne(a => a.Category).WithMany(c => c.Articles).HasForeignKey(a => a.CategoryId);
+            modelBuilder.Entity<Article>()
+                .HasOne(a => a.Category)
+                .WithMany(c => c.Articles)
+                .HasForeignKey(a => a.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
