@@ -47,5 +47,11 @@ namespace MyBlog.Web.Client.Api.Apis
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<OperateResult<List<CategoryInfo>>>();
         }
+        public async Task<OperateResult> GetMostViewCategoryType()
+        {
+            var response = await _httpClient.GetAsync("/api/Category/GetMostViewCategoryType");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<OperateResult>();
+        }
     }
 }

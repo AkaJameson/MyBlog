@@ -3,7 +3,7 @@
 <div class="article-card">
     <div class="article-category">@Article.CategoryName</div>
     <h3 class="article-title">@Article.Title</h3>
-    <p class="article-excerpt">@GetExcerpt(Article.Content)</p>
+    <p class="article-excerpt">@((MarkupString)Article.Content)</p>
 
     <div class="article-meta">
         <span>posted @Article.CreateTime</span>
@@ -20,10 +20,4 @@
     [Parameter]
     [NotNull]
     public ArticleInfo Article { get; set; }
-
-    private string GetExcerpt(string content)
-    {
-        if (string.IsNullOrEmpty(content)) return "";
-        return content.Length > 100 ? content.Substring(0, 100) + "..." : content;
-    }
 }

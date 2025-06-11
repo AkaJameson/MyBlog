@@ -125,7 +125,26 @@ namespace MyBlog.Services.ServicesImpl
             return OperateResult.Successed(categorys);
 
         }
-       
+        /// <summary>
+        /// 获取最受欢迎的分类
+        /// </summary>
+        /// <returns></returns>
+        public async Task<OperateResult> GetMostViewCategoryType()
+        {
+            var result = await _unitOfWork.GetRepository<Category>()
+                         .AsNoTracking()
+                         .Include(c => c.Articles)
+                         .OrderByDescending(p => p.Articles.Count())
+                         .Take(5)
+                         .Select(p => new
+                         {
+                             p.Id,
+                             p.CategoryName,
+                             num = p.Articles.Count()
+                         }).ToListAsync();
+            return OperateResult.Successed(result);
+        }
+
 
     }
 }

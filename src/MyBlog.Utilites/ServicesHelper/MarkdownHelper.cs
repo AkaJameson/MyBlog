@@ -32,5 +32,21 @@ namespace MyBlog.Services.ServicesHelper
                 ? string.Empty
                 : text.Trim().Length > maxLength ? text.Trim().Substring(0, maxLength) + "..." : text.Trim();
         }
+        /// <summary>
+        /// 将 Markdown 文本转换为 HTML
+        /// </summary>
+        public static string ConvertMarkdownToHtml(this string markdown)
+        {
+            if (string.IsNullOrWhiteSpace(markdown))
+                return string.Empty;
+
+            var pipeline = new MarkdownPipelineBuilder()
+                .UseAdvancedExtensions()
+                .Build();
+
+            var html = Markdown.ToHtml(markdown, pipeline);
+
+            return html;
+        }
     }
 }

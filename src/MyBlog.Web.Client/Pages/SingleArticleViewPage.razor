@@ -1,0 +1,30 @@
+﻿@page "/view/article/{Id}"
+@using MyBlog.Web.Client.Api.Apis
+@layout FrontView
+
+<div class="markdown-body" @key="ArticleHtmlContent">
+    @((MarkupString)ArticleHtmlContent)
+</div>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+    [Parameter] public ArticleApiService articleApiService { get; set; }
+
+    private string ArticleHtmlContent = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 假设通过 API 拿到 HTML 内容
+        var result = await articleApiService.QuerySingleArticle(Id, true);
+        if(result.Code == 200)
+        {
+            ArticleHtmlContent = result.Data.Content;
+        }
+        else
+        {
+            ArticleHtmlContent = "文章不存在";
+        }
+    }
+}

@@ -1,5 +1,7 @@
-﻿using MyBlog.DataAccessor.EFCore;
+﻿using Microsoft.EntityFrameworkCore;
+using MyBlog.DataAccessor.EFCore;
 using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
+using MyBlog.Models.Data;
 using MyBlog.Utilites;
 
 namespace MyBlog.Services.ServicesImpl
@@ -12,5 +14,9 @@ namespace MyBlog.Services.ServicesImpl
         {
             _unitOfWork = unitOfWork;
         }
+        ///按照查询最多的文章类型
+      
+
+        
     }
 }

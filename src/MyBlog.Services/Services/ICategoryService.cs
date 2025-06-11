@@ -11,5 +11,6 @@ namespace MyBlog.Services.Services
         Task<OperateResult<CategoryDto>> QueryCategory(CategoryQuery query);
         Task<OperateResult> UpdateCategory(CategoryEdit category);
         Task<OperateResult<List<CategoryInfo>>> GetCategoryList();
+        Task<OperateResult> GetMostViewCategoryType();
     }
 }

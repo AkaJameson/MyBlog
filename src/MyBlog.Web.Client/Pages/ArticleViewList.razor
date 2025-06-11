@@ -1,0 +1,19 @@
+﻿@using MyBlog.Web.Client.Api.Apis
+@using MyBlog.Web.Client.Shared
+@inherits ArticleViewListBase
+@layout FrontView
+@page "/views/articles"
+<div class="page-wapper">
+    <div class="container">
+        <div class="article-list">
+            @foreach (var item in ArticleInfos)
+            {
+                <ArticleCard Article="item" />
+            }
+        </div>
+        <div class="peg">
+            <Pagination @ref="Pegination" PageIndex="@PageIndex" PageCount="@TotalPage" Alignment="Alignment.Center" class="mb-3" />
+        </div>
+    </div>
+</div>
+

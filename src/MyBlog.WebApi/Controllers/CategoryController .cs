@@ -83,5 +83,13 @@ namespace MyBlog.WebApi.Controllers
             }
             return await _categoryService.GetCategoryList();
         }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "获取最热门分类", Description = "获取最热门的分类")]
+        public async Task<OperateResult> GetMostViewCategoryType()
+        {
+            return await _categoryService.GetMostViewCategoryType();
+        }
     }
 }

@@ -123,7 +123,7 @@ namespace MyBlog.Services.ServicesImpl
             {
                 CategoryName = article.Category.CategoryName,
                 CategroyId = article.CategoryId,
-                Content = article.Content,
+                Content = article.Content.ConvertMarkdownToHtml(),
                 CreateTime = article.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 Id = article.Id,
                 Title = article.Title,
@@ -173,7 +173,7 @@ namespace MyBlog.Services.ServicesImpl
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 Content = articleQuery.IsExcerpt
                 ? MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200)
-                : p.Content,
+                : p.Content.ConvertMarkdownToHtml(),
                 views = p.Views,
                 IsPublished = p.IsPublished,
             }).ToListAsync();
@@ -226,7 +226,7 @@ namespace MyBlog.Services.ServicesImpl
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 Content = articleQuery.IsExcerpt
                 ? MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200)
-                : p.Content,
+                : p.Content.ConvertMarkdownToHtml(),
                 views = p.Views,
                 IsPublished = p.IsPublished,
             }).ToListAsync();
