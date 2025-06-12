@@ -1,34 +1,17 @@
 ﻿@using MyBlog.Web.Client.Shared
 @inherits LayoutComponentBase
 
-<div class=".front-layout">
+<div class="front-layout">
     <Navbar></Navbar>
     <div class="fronter">
-        @Body
+        <div class="fronter-body">
+            @Body
+        </div>
+        <Divider/>
+        <div class="footer-content">
+            <div>当前时间: @CurrentTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+            <div>© 2025 Xin. All rights reserved.</div>
+        </div>
     </div>
 </div>
-<style>
-    .front-layout {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        overflow: hidden;
-        background-color: #e6e6e6;
-        overflow-y: auto;
-        scrollbar-width: none;
-    }
 
-        .front-layout::-webkit-scrollbar {
-            display: none; /* Chrome, Safari */
-        }
-
-        .front-layout .fronter {
-            width: 75%;
-            margin: 0 auto;
-            padding: 10px;
-            flex: 1;
-            z-index:1000;
-            box-shadow: 0 2px 6px rgba(100,100,100,.3)
-        }
-
-</style>

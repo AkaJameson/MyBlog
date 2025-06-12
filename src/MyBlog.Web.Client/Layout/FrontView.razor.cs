@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace MyBlog.Web.Client.Shared
+namespace MyBlog.Web.Client.Layout
 {
-    public class FooterBase: ComponentBase
+    public partial class FrontView
     {
         protected DateTime CurrentTime = DateTime.Now;
         private Timer? timer;
