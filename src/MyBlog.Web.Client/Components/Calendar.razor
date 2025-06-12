@@ -1,0 +1,26 @@
+﻿<div class="calendar-container">
+    <div class="calendar-header">
+        <button class="nav-btn" @onclick="PrevMonth">&lt;</button>
+        <h3>@CurrentMonth.ToString("yyyy年MM月")</h3>
+        <button class="nav-btn" @onclick="NextMonth">&gt;</button>
+    </div>
+
+    <div class="calendar-weekdays">
+        <div>日</div>
+        <div>一</div>
+        <div>二</div>
+        <div>三</div>
+        <div>四</div>
+        <div>五</div>
+        <div>六</div>
+    </div>
+
+    <div class="calendar-grid">
+        @foreach (var day in Days)
+        {
+            <div class="calendar-day @(day.IsToday ? "today" : "") @(day.IsCurrentMonth ? "" : "other-month")">
+                @day.Day
+            </div>
+        }
+    </div>
+</div>

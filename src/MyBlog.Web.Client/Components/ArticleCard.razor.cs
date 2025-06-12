@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MyBlog.Models.Dto;
 
-namespace MyBlog.Web.Client.Shared
+namespace MyBlog.Web.Client.Components
 {
     public partial class ArticleCard
     {
