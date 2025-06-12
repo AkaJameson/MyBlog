@@ -1,0 +1,93 @@
+﻿.moment-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+    .moment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+.moment-header {
+    display: flex;
+    padding: 15px 20px;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4361ee, #3a0ca3);
+    margin-right: 12px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.time {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.moment-content {
+    padding: 15px 20px;
+}
+
+    .moment-content p {
+        margin: 0 0 15px 0;
+        line-height: 1.6;
+        color: #495057;
+    }
+
+.moment-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+    .moment-images .image {
+        aspect-ratio: 1/1;
+        background-size: cover;
+        background-position: center;
+        border-radius: 6px;
+        background-color: #f5f7fa;
+    }
+
+.moment-footer {
+    padding: 10px 20px;
+    border-top: 1px solid #eee;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+}
+
+    .actions button {
+        background: none;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: color 0.2s;
+    }
+
+        .actions button:hover {
+            color: #4361ee;
+        }

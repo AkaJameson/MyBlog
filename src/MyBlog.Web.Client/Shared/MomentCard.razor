@@ -1,0 +1,35 @@
+﻿<div class="moment-card">
+    <div class="moment-header">
+        <div class="avatar"></div>
+        <div class="user-info">
+            <span class="username">Jameson</span>
+            <span class="time">@Moment.CreateTime.ToString("yyyy-MM-dd HH:mm")</span>
+        </div>
+    </div>
+
+    <div class="moment-content">
+        <p>@Moment.Content</p>
+
+        @if (Moment.Images != null && Moment.Images.Any())
+        {
+            <div class="moment-images">
+                @foreach (var image in Moment.Images.Take(3))
+                {
+                    <div class="image" style="background-image: url('@image')"></div>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="moment-footer">
+        <div class="actions">
+            <button>❤️ @Moment.LikeCount</button>
+            <button>💬 @Moment.CommentCount</button>
+            <button>🔗 分享</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public MomentDto Moment { get; set; }
+}
