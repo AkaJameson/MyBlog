@@ -1,0 +1,165 @@
+﻿<div class="popular-articles">
+    <div class="section-header">
+        <h3>热门文章</h3>
+        <div class="view-all">查看全部</div>
+    </div>
+
+    <div class="articles-list">
+        <div class="article-item">
+            <div class="article-rank">1</div>
+            <div class="article-info">
+                <div class="article-title">Blazor高级技巧与最佳实践</div>
+                <div class="article-meta">
+                    <span class="views">1.2K 阅读</span>
+                    <span class="comments">42 评论</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="article-item">
+            <div class="article-rank">2</div>
+            <div class="article-info">
+                <div class="article-title">.NET 8性能优化指南</div>
+                <div class="article-meta">
+                    <span class="views">987 阅读</span>
+                    <span class="comments">35 评论</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="article-item">
+            <div class="article-rank">3</div>
+            <div class="article-info">
+                <div class="article-title">前端框架比较：React vs Vue vs Blazor</div>
+                <div class="article-meta">
+                    <span class="views">845 阅读</span>
+                    <span class="comments">28 评论</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="article-item">
+            <div class="article-rank">4</div>
+            <div class="article-info">
+                <div class="article-title">Entity Framework Core高级用法</div>
+                <div class="article-meta">
+                    <span class="views">732 阅读</span>
+                    <span class="comments">24 评论</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="article-item">
+            <div class="article-rank">5</div>
+            <div class="article-info">
+                <div class="article-title">微服务架构设计与实现</div>
+                <div class="article-meta">
+                    <span class="views">689 阅读</span>
+                    <span class="comments">19 评论</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .popular-articles {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+        .popular-articles:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+        .section-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #4361ee;
+            font-weight: 500;
+        }
+
+    .view-all {
+        font-size: 0.9rem;
+        color: #6c757d;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+        .view-all:hover {
+            color: #4361ee;
+            text-decoration: underline;
+        }
+
+    .articles-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .article-item {
+        display: flex;
+        gap: 12px;
+        padding: 10px;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+        .article-item:hover {
+            background-color: #f8f9fa;
+            transform: translateX(3px);
+        }
+
+    .article-rank {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #4361ee;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .article-info {
+        flex: 1;
+    }
+
+    .article-title {
+        font-weight: 500;
+        margin-bottom: 5px;
+        color: #343a40;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .article-meta {
+        display: flex;
+        gap: 15px;
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    .views::before {
+        content: "👁️ ";
+    }
+
+    .comments::before {
+        content: "💬 ";
+    }
+
+</style>

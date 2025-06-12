@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #e6e6e6;
+    background-color: #f5f7fa;
     overflow: hidden;
     scrollbar-width: none;
 }
@@ -11,17 +11,30 @@
         display: none;
     }
 
+.main-container {
+    display: flex;
+    width: 90%;
+    max-width: 1400px;
+    margin: 1.5rem auto 0;
+    gap: 25px;
+}
+
+.sidebar {
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
 .fronter {
-    width: 65%;
-    margin: 0 auto;
-    margin-top: 1.5rem;
-    border-radius: 5px;
-    padding: 10px;
-    flex: 1; 
+    flex: 1;
+    min-height:95vh;
+    border-radius: 10px;
+    padding: 25px;
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
-    box-shadow: 0 2px 6px rgba(100,100,100,.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     z-index: 1000;
 }
 
@@ -38,4 +51,39 @@
     font-size: 0.9rem;
     margin-top: 1rem;
     padding-bottom: 1rem;
+    color: #6c757d;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .main-container {
+        width: 95%;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+        .sidebar > * {
+            flex: 1;
+            min-width: 300px;
+        }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        flex-direction: column;
+    }
+
+    .fronter {
+        padding: 20px;
+    }
 }

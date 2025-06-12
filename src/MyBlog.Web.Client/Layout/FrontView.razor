@@ -3,15 +3,28 @@
 
 <div class="front-layout">
     <Navbar></Navbar>
-    <div class="fronter">
-        <div class="fronter-body">
-            @Body
+    <div class="main-container">
+        <!-- 左侧边栏 -->
+        <div class="sidebar">
+            <ProfileCard />
+            <MyBlog.Web.Client.Shared.Calendar/>
         </div>
-        <Divider/>
-        <div class="footer-content">
-            <div>当前时间: @CurrentTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
-            <div>© 2025 Xin. All rights reserved.</div>
+        
+        <!-- 主内容区 -->
+        <div class="fronter">
+            <div class="fronter-body">
+                @Body
+            </div>
+            <Divider/>
+            <div class="footer-content">
+                <div>当前时间: @CurrentTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                <div>© 2025 Xin. All rights reserved.</div>
+            </div>
+        </div>
+        
+        <!-- 右侧边栏 -->
+        <div class="sidebar">
+            <PopularArticles />
         </div>
     </div>
 </div>
-
