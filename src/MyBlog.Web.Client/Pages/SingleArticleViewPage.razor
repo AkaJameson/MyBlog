@@ -1,4 +1,4 @@
-﻿@page "/view/article/{Id}"
+﻿@page "/view/article/{Id:int}"
 @using MyBlog.Web.Client.Api.Apis
 @layout FrontView
 
@@ -8,7 +8,6 @@
 
 @code {
     [Parameter]
-    [SupplyParameterFromQuery]
     public int Id { get; set; }
     [Parameter] public ArticleApiService articleApiService { get; set; }
 

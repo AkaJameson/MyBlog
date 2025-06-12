@@ -4,6 +4,7 @@ using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Models.Data;
 using MyBlog.Models.Dto;
 using MyBlog.Models.Models;
+using MyBlog.Services.Repository;
 using MyBlog.Services.Services;
 using MyBlog.Utilites;
 
@@ -13,9 +14,11 @@ namespace MyBlog.Services.ServicesImpl
     public class CategoryServiceImpl : ICategoryService
     {
         private readonly IUnitOfWork<BlogDbContext> _unitOfWork;
-        public CategoryServiceImpl(IUnitOfWork<BlogDbContext> unitOfWork)
+        private readonly HotMapRepository hotMapRepository;
+        public CategoryServiceImpl(IUnitOfWork<BlogDbContext> unitOfWork, HotMapRepository hotMapRepository)
         {
             _unitOfWork = unitOfWork;
+            this.hotMapRepository = hotMapRepository;
         }
         /// <summary>
         /// 添加一个新分类
@@ -98,7 +101,7 @@ namespace MyBlog.Services.ServicesImpl
             }
             else
             {
-                if (await _unitOfWork.GetRepository<Category>().ExistsAsync(c => c.CategoryName == category.CategoryName && c.Id != category.Id ))
+                if (await _unitOfWork.GetRepository<Category>().ExistsAsync(c => c.CategoryName == category.CategoryName && c.Id != category.Id))
                 {
                     return OperateResult.Failed("分类已存在");
                 }
@@ -106,6 +109,7 @@ namespace MyBlog.Services.ServicesImpl
                 {
                     categoryEntity.CategoryName = category.CategoryName;
                     await _unitOfWork.GetRepository<Category>().UpdateAsync(categoryEntity);
+                    await hotMapRepository.AddHotMapAsync();
                     await _unitOfWork.CommitAsync();
                     return OperateResult.Successed();
                 }
@@ -116,7 +120,7 @@ namespace MyBlog.Services.ServicesImpl
         public async Task<OperateResult<List<CategoryInfo>>> GetCategoryList()
         {
             var categorys = await _unitOfWork.GetRepository<Category>().AsNoTracking()
-                .Select(p=>new CategoryInfo
+                .Select(p => new CategoryInfo
                 {
                     CategoryName = p.CategoryName,
                     Id = p.Id,

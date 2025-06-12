@@ -11,5 +11,6 @@ namespace MyBlog.Services.Services
         Task<OperateResult<ThoughtDto>> QueryThoughtsAsync(ThoughtQuery query);
         Task<OperateResult> UpdateThoughtAsync(ThoughtEdit thought);
         Task<OperateResult<List<ThoughtInfo>>> GetThoughtListAsync();
+        Task<OperateResult> AddLikeAsync(int id);
     }
 }

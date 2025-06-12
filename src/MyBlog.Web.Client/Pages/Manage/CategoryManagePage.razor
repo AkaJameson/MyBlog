@@ -59,7 +59,13 @@
                                     </BodyTemplate>
                                 </ModalDialog>
                             </Modal>
-                            <PopConfirmButton ButtonStyle="ButtonStyle.Round" Color="Color.Danger" OnConfirm="@(() => DeleteCategory(value.Value))">删除</PopConfirmButton>
+                            <PopConfirmButton ButtonStyle="ButtonStyle.Round" Color="Color.Danger" OnConfirm="@(() => DeleteCategory(value.Value))" Text="删除">
+                                <BodyTemplate>
+                                    <div>
+                                        <span>该操作会永久删除该分类下的所有文章，确定删除？</span>
+                                    </div>
+                                </BodyTemplate>
+                                </PopConfirmButton>
                         </div>
                     </Template>
                 </TableColumn>

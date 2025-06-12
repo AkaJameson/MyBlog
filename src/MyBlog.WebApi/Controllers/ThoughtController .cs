@@ -82,5 +82,17 @@ namespace MyBlog.WebApi.Controllers
         {
             return await _thoughtService.GetThoughtListAsync();
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<OperateResult> AddLike([FromQuery] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return OperateResult.Failed<ArticleInfo>("无效的请求格式");
+            }
+            return await _thoughtService.AddLikeAsync(id);
+        }
     }
 }

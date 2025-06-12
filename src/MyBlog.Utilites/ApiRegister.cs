@@ -56,7 +56,6 @@ namespace MyBlog.Utilites
 
                 if (!serviceTypes.Any())
                 {
-                    // fallback：注册自身
                     serviceTypes.Add(implementationType);
                 }
 

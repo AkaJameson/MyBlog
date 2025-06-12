@@ -138,5 +138,27 @@ namespace MyBlog.WebApi.Controllers
             }
             return await _articleService.RealDelete(id);
         }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<OperateResult<List<ArticleInfo>>> QueryPopularArticle([FromQuery] int count)
+        {
+            if (!ModelState.IsValid)
+            {
+                return OperateResult.Failed<List<ArticleInfo>>("无效的请求格式");
+            }
+            return await _articleService.QueryMostViewdArticles(count);
+        }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<OperateResult> AddLike([FromQuery] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return OperateResult.Failed<ArticleInfo>("无效的请求格式");
+            }
+            return await _articleService.AddLikeAsync(id);
+        }
     }
 }

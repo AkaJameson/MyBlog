@@ -4,6 +4,7 @@ using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Models.Data;
 using MyBlog.Models.Dto;
 using MyBlog.Models.Models;
+using MyBlog.Services.Repository;
 using MyBlog.Services.Services;
 using MyBlog.Services.ServicesHelper;
 using MyBlog.Utilites;
@@ -14,9 +15,11 @@ namespace MyBlog.Services.ServicesImpl
     public class ArticalServiceImpl : IArticalService
     {
         private readonly IUnitOfWork<BlogDbContext> _unitOfWork;
-        public ArticalServiceImpl(IUnitOfWork<BlogDbContext> unitOfWork)
+        private readonly HotMapRepository hotMapRepository;
+        public ArticalServiceImpl(IUnitOfWork<BlogDbContext> unitOfWork, HotMapRepository hotMapRepository)
         {
             _unitOfWork = unitOfWork;
+            this.hotMapRepository = hotMapRepository;
         }
 
         public async Task<OperateResult> AddArticle(ArticalAdd artical)
@@ -44,6 +47,7 @@ namespace MyBlog.Services.ServicesImpl
                 article.PublishDate = DateTime.Now;
             }
             await _unitOfWork.GetRepository<Article>().AddAsync(article);
+            await hotMapRepository.AddHotMapAsync();
             await _unitOfWork.CommitAsync();
             return OperateResult.Successed();
         }
@@ -103,7 +107,9 @@ namespace MyBlog.Services.ServicesImpl
             {
                 dbArtical.IsPublished = artical.IsPublished.Value;
             }
+
             await _unitOfWork.CommitAsync();
+            await hotMapRepository.AddHotMapAsync();
             return OperateResult.Successed();
         }
         public async Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool addViews = true)
@@ -262,6 +268,43 @@ namespace MyBlog.Services.ServicesImpl
         {
             await _unitOfWork.GetRepository<Article>().DeleteAsync(id);
             return OperateResult.Successed();
+        }
+        /// <summary>
+        /// 点赞
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<OperateResult> AddLikeAsync(int id)
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetByIdAsync(id);
+            if (article == null)
+            {
+                return OperateResult.Failed("文章不存在");
+            }
+            article.Like++;
+            await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+            await _unitOfWork.CommitAsync();
+            return OperateResult.Successed();
+        }
+
+        public async Task<OperateResult<List<ArticleInfo>>> QueryMostViewdArticles(int count)
+        {
+            var articles = await _unitOfWork.GetRepository<Article>().Where(p => !p.IsDeleted && p.IsPublished)
+               .OrderByDescending(p => p.Views)
+               .Take(count)
+               .ToListAsync();
+            var result = articles.Select(p => new ArticleInfo
+            {
+                Id = p.Id,
+                Title = p.Title,
+                CategoryName = p.Category.CategoryName,
+                CategroyId = p.CategoryId,
+                CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                Content = p.Content.ConvertMarkdownToHtml(),
+                views = p.Views,
+                IsPublished = p.IsPublished,
+            }).ToList();
+            return OperateResult.Successed(result);
         }
 
     }

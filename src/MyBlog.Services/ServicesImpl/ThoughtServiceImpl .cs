@@ -4,6 +4,7 @@ using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Models.Data;
 using MyBlog.Models.Dto;
 using MyBlog.Models.Models;
+using MyBlog.Services.Repository;
 using MyBlog.Services.Services;
 using MyBlog.Utilites;
 
@@ -13,10 +14,12 @@ namespace MyBlog.Services.ServicesImpl
     public class ThoughtServiceImpl : IThoughtService
     {
         private readonly IUnitOfWork<BlogDbContext> _unitOfWork;
+        private readonly HotMapRepository _hotMapRepository;
 
-        public ThoughtServiceImpl(IUnitOfWork<BlogDbContext> unitOfWork)
+        public ThoughtServiceImpl(IUnitOfWork<BlogDbContext> unitOfWork, HotMapRepository hotMapRepository)
         {
             _unitOfWork = unitOfWork;
+            _hotMapRepository = hotMapRepository;
         }
 
         public async Task<OperateResult> AddThoughtAsync(ThoughtAdd thought)
@@ -33,6 +36,7 @@ namespace MyBlog.Services.ServicesImpl
             };
 
             await _unitOfWork.GetRepository<Thought>().AddAsync(newThought);
+            await _hotMapRepository.AddHotMapAsync();
             await _unitOfWork.CommitAsync();
             return OperateResult.Successed();
         }
@@ -60,6 +64,7 @@ namespace MyBlog.Services.ServicesImpl
                     predicate: t => !t.IsDeleted,
                     orderBy: q=>q.PublishTime
                 );
+
 
             var result = new ThoughtDto
             {
@@ -90,6 +95,7 @@ namespace MyBlog.Services.ServicesImpl
 
             thoughtEntity.Content = thought.Content;
             await _unitOfWork.GetRepository<Thought>().UpdateAsync(thoughtEntity);
+            await _hotMapRepository.AddHotMapAsync();
             await _unitOfWork.CommitAsync();
             return OperateResult.Successed();
         }
@@ -107,6 +113,23 @@ namespace MyBlog.Services.ServicesImpl
                 }).ToListAsync();
 
             return OperateResult.Successed(thoughts);
+        }
+        /// <summary>
+        /// 说说点赞
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<OperateResult> AddLikeAsync(int id)
+        {
+            var thought = await _unitOfWork.GetRepository<Thought>().GetByIdAsync(id);
+            if (thought == null || thought.IsDeleted)
+            {
+                return OperateResult.Failed("说说不存在或已被删除");
+            }
+            thought.Like++;
+            await _unitOfWork.GetRepository<Thought>().UpdateAsync(thought);
+            await _unitOfWork.CommitAsync();
+            return OperateResult.Successed();
         }
     }
 }
