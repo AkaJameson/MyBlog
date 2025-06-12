@@ -1,0 +1,128 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+
+<div class="heatmap-container">
+    <div class="heatmap-header">
+        <h3>活动热力图</h3>
+        <div class="year-selector">
+            <button class="year-btn" @onclick="() => ChangeYear(-1)">←</button>
+            <span class="current-year">@SelectedYear</span>
+            <button class="year-btn" @onclick="() => ChangeYear(1)">→</button>
+        </div>
+    </div>
+
+    <div class="heatmap">
+        <!-- 月份标签 -->
+        <div class="month-labels">
+            @foreach (var month in Months)
+            {
+                <div class="month-label">@month</div>
+            }
+        </div>
+
+        <!-- 星期标签 -->
+        <div class="day-labels">
+            <div class="day-label">日</div>
+            <div class="day-label">一</div>
+            <div class="day-label">二</div>
+            <div class="day-label">三</div>
+            <div class="day-label">四</div>
+            <div class="day-label">五</div>
+            <div class="day-label">六</div>
+        </div>
+
+        <!-- 热力格子 -->
+        <div class="heatmap-grid">
+            @foreach (var cell in HeatmapData)
+            {
+                <div class="heatmap-cell @GetIntensityClass(cell.Value)"
+                     title="@cell.Date.ToString("yyyy-MM-dd")：@cell.Value 次"
+                     @onclick="() => CellClicked(cell.Date)">
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="heatmap-legend">
+        <span>少</span>
+        <div class="legend-item level0"></div>
+        <div class="legend-item level1"></div>
+        <div class="legend-item level2"></div>
+        <div class="legend-item level3"></div>
+        <div class="legend-item level4"></div>
+        <span>多</span>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int SelectedYear { get; set; } = DateTime.Now.Year;
+    [Parameter] public Dictionary<DateTime, int> ActivityData { get; set; }
+    [Parameter] public Func<Task<Dictionary<DateTime, int>>> QueryData { get; set; }
+
+    private List<HeatmapCell> HeatmapData = new();
+    private readonly string[] Months = { "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        ActivityData = await QueryData?.Invoke() ?? new();
+
+    }
+    protected override void OnParametersSet()
+    {
+        GenerateHeatmapData();
+    }
+
+    private void GenerateHeatmapData()
+    {
+        HeatmapData.Clear();
+        var startDate = new DateTime(SelectedYear, 1, 1);
+        var endDate = new DateTime(SelectedYear, 12, 31);
+
+        // 计算偏移量，使1月1日对齐到正确的星期位置
+        int offset = (int)startDate.DayOfWeek;
+        for (int i = 0; i < offset; i++)
+        {
+            // 添加空白格子
+            HeatmapData.Add(new HeatmapCell { Date = DateTime.MinValue, Value = -1 });
+        }
+
+        // 填充整年的日期格子
+        for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+        {
+            int value = ActivityData.TryGetValue(date.Date, out var count) ? count : 0;
+            HeatmapData.Add(new HeatmapCell { Date = date, Value = value });
+        }
+    }
+
+    private string GetIntensityClass(int value)
+    {
+        return value switch
+        {
+            -1 => "empty",
+            0 => "level0",
+            <= 3 => "level1",
+            <= 6 => "level2",
+            <= 9 => "level3",
+            _ => "level4"
+        };
+    }
+
+    private void ChangeYear(int delta)
+    {
+        SelectedYear += delta;
+        GenerateHeatmapData();
+    }
+
+    private void CellClicked(DateTime date)
+    {
+
+    }
+
+    private class HeatmapCell
+    {
+        public DateTime Date { get; set; }
+        public int Value { get; set; }
+    }
+}

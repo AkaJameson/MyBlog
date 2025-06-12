@@ -15,6 +15,8 @@ namespace MyBlog.Models.Data
 
         public DateTime PublishTime { get; set; }
 
+        public int Like { get; set; }
+
         public bool IsDeleted { get; set; } = false;
     }
 }
