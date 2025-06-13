@@ -6,7 +6,7 @@
 @layout MainLayout
 
 <div class="container">
-    <Card class="mb-3">
+    <Card class="mb-3 card-body ">
         <HeaderTemplate>
             <div class="d-flex justify-content-between align-items-center">
                 <span class="mx-2">说说管理</span>
@@ -28,14 +28,14 @@
                             <div class="d-flex gap-2">
                                 <Button Color="Color.Primary" Size="Size.ExtraSmall"
                                         OnClick="@(async () => {
-                                        ThoughtContent = context.Content;
-                                        CurrentThoughtId = context.Id;
+                                        ThoughtContent = Thoughts.FirstOrDefault(p=>p.Id == value.Value)?.Content??"";
+                                        CurrentThoughtId = value.Value;
                                         ModalRef?.Toggle();
                                     })">
                                     编辑
                                 </Button>
                                 <Button Color="Color.Danger" Size="Size.ExtraSmall"
-                                        OnClick="@(async () => await DeleteThought(context.Id))">
+                                        OnClick="@(async () => await DeleteThought(value.Value))">
                                     删除
                                 </Button>
                             </div>

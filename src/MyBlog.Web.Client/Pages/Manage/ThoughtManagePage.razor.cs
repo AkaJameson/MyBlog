@@ -191,7 +191,6 @@ namespace MyBlog.Web.Client.Pages.Manage
                 });
             }
         }
-
         private Task OnDialogClosed()
         {
             ThoughtContent = string.Empty;
