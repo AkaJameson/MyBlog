@@ -3,41 +3,30 @@
 
 <div class="heatmap-container">
     <div class="heatmap-header">
-        <h3>活动热力图</h3>
-        <div class="year-selector">
-            <button class="year-btn" @onclick="() => ChangeYear(-1)">←</button>
-            <span class="current-year">@SelectedYear</span>
-            <button class="year-btn" @onclick="() => ChangeYear(1)">→</button>
-        </div>
+        <button class="nav-btn" @onclick="PrevMonth">&lt;</button>
+        <h3>@CurrentMonth.ToString("yyyy年MM月")</h3>
+        <button class="nav-btn" @onclick="NextMonth">&gt;</button>
     </div>
 
     <div class="heatmap">
-        <!-- 月份标签 -->
-        <div class="month-labels">
-            @foreach (var month in Months)
-            {
-                <div class="month-label">@month</div>
-            }
-        </div>
-
         <!-- 星期标签 -->
-        <div class="day-labels">
-            <div class="day-label">日</div>
-            <div class="day-label">一</div>
-            <div class="day-label">二</div>
-            <div class="day-label">三</div>
-            <div class="day-label">四</div>
-            <div class="day-label">五</div>
-            <div class="day-label">六</div>
+        <div class="heatmap-weekdays">
+            <div>日</div>
+            <div>一</div>
+            <div>二</div>
+            <div>三</div>
+            <div>四</div>
+            <div>五</div>
+            <div>六</div>
         </div>
 
-        <!-- 热力格子 -->
+        <!-- 热力图格子 -->
         <div class="heatmap-grid">
             @foreach (var cell in HeatmapData)
             {
                 <div class="heatmap-cell @GetIntensityClass(cell.Value)"
-                     title="@cell.Date.ToString("yyyy-MM-dd")：@cell.Value 次"
-                     @onclick="() => CellClicked(cell.Date)">
+                     title="@(cell.IsCurrentMonth ? $"{cell.Date:yyyy-MM-dd}：{cell.Value}次" : "")"
+                     @onclick="() => { if (cell.IsCurrentMonth) CellClicked(cell.Date); }">
                 </div>
             }
         </div>
@@ -55,20 +44,25 @@
 </div>
 
 @code {
-    [Parameter] public int SelectedYear { get; set; } = DateTime.Now.Year;
     [Parameter] public Dictionary<DateTime, int> ActivityData { get; set; }
     [Parameter] public Func<Task<Dictionary<DateTime, int>>> QueryData { get; set; }
 
+    private DateTime CurrentMonth = DateTime.Today;
     private List<HeatmapCell> HeatmapData = new();
-    private readonly string[] Months = { "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" };
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
-
-        ActivityData = await QueryData?.Invoke() ?? new();
-
+        if (QueryData != null)
+        {
+            ActivityData = await QueryData.Invoke();
+        }
+        else
+        {
+            ActivityData = new Dictionary<DateTime, int>();
+        }
+        GenerateHeatmapData();
     }
+
     protected override void OnParametersSet()
     {
         GenerateHeatmapData();
@@ -77,22 +71,52 @@
     private void GenerateHeatmapData()
     {
         HeatmapData.Clear();
-        var startDate = new DateTime(SelectedYear, 1, 1);
-        var endDate = new DateTime(SelectedYear, 12, 31);
+        if (ActivityData == null) return;
 
-        // 计算偏移量，使1月1日对齐到正确的星期位置
-        int offset = (int)startDate.DayOfWeek;
-        for (int i = 0; i < offset; i++)
+        var firstDay = new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1);
+        var lastDay = firstDay.AddMonths(1).AddDays(-1);
+
+        // 计算第一天的星期（星期日为0）
+        int startDayOfWeek = (int)firstDay.DayOfWeek;
+
+        // 填充前一个月空白
+        for (int i = 0; i < startDayOfWeek; i++)
         {
-            // 添加空白格子
-            HeatmapData.Add(new HeatmapCell { Date = DateTime.MinValue, Value = -1 });
+            DateTime prevDay = firstDay.AddDays(-(startDayOfWeek - i));
+            HeatmapData.Add(new HeatmapCell
+                {
+                    Date = prevDay,
+                    Value = -1,
+                    IsCurrentMonth = false
+                });
         }
 
-        // 填充整年的日期格子
-        for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+        // 当前月日期
+        for (DateTime date = firstDay; date <= lastDay; date = date.AddDays(1))
         {
-            int value = ActivityData.TryGetValue(date.Date, out var count) ? count : 0;
-            HeatmapData.Add(new HeatmapCell { Date = date, Value = value });
+            int value = ActivityData.ContainsKey(date.Date) ? ActivityData[date.Date] : 0;
+            HeatmapData.Add(new HeatmapCell
+                {
+                    Date = date,
+                    Value = value,
+                    IsCurrentMonth = true
+                });
+        }
+
+        // 计算最后一天的星期
+        int endDayOfWeek = (int)lastDay.DayOfWeek;
+
+        // 填充后一个月空白
+        int nextMonthDays = 6 - endDayOfWeek;
+        for (int i = 1; i <= nextMonthDays; i++)
+        {
+            DateTime nextDay = lastDay.AddDays(i);
+            HeatmapData.Add(new HeatmapCell
+                {
+                    Date = nextDay,
+                    Value = -1,
+                    IsCurrentMonth = false
+                });
         }
     }
 
@@ -109,20 +133,27 @@
         };
     }
 
-    private void ChangeYear(int delta)
+    private void PrevMonth()
     {
-        SelectedYear += delta;
+        CurrentMonth = CurrentMonth.AddMonths(-1);
+        GenerateHeatmapData();
+    }
+
+    private void NextMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(1);
         GenerateHeatmapData();
     }
 
     private void CellClicked(DateTime date)
     {
-
+        // 点击事件处理
     }
 
     private class HeatmapCell
     {
         public DateTime Date { get; set; }
         public int Value { get; set; }
+        public bool IsCurrentMonth { get; set; }
     }
 }

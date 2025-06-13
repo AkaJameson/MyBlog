@@ -2,20 +2,20 @@
     <div class="card-header">
         <h3>@Article.Title</h3>
         <div class="meta-info">
-            <span class="date">@Article.CreateTime.ToString</span>
+            <span class="date">@Article.CreateTime</span>
             <span class="category">@Article.CategoryName</span>
         </div>
     </div>
 
     <div class="card-content">
-        <div class="cover-image" style="@(string.IsNullOrEmpty(Article.CoverImage) ? "" : $"background-image: url('{Article.CoverImage}')")"></div>
-        <div class="summary">@MarkdownHelper.ExtractPlainTextFromMarkdown(Article.Content, 150)</div>
+        @* <div class="cover-image" style="@(string.IsNullOrEmpty(Article.CoverImage) ? "" : $"background-image: url('{Article.CoverImage}')")"></div> *@
+        <div class="summary">@Article.Content</div>
     </div>
 
     <div class="card-footer">
         <div class="stats">
-            <span>👁️ @Article.ViewCount 阅读</span>
-            <span>❤️ @Article.LikeCount 点赞</span>
+            <span>👁️ @Article.views 阅读</span>
+            <span>❤️ @Article.likes 点赞</span>
         </div>
     </div>
 </div>

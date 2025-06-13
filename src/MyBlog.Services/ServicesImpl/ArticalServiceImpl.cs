@@ -134,7 +134,7 @@ namespace MyBlog.Services.ServicesImpl
                 Id = article.Id,
                 Title = article.Title,
                 views = article.Views,
-                IsPublished = article.IsPublished,
+                likes = article.Like
             });
         }
         /// <summary>
@@ -181,7 +181,7 @@ namespace MyBlog.Services.ServicesImpl
                 ? MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200)
                 : p.Content.ConvertMarkdownToHtml(),
                 views = p.Views,
-                IsPublished = p.IsPublished,
+                likes = p.Like
             }).ToListAsync();
             return OperateResult.Successed<ArticleDto>(new ArticleDto
             {
@@ -234,7 +234,7 @@ namespace MyBlog.Services.ServicesImpl
                 ? MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200)
                 : p.Content.ConvertMarkdownToHtml(),
                 views = p.Views,
-                IsPublished = p.IsPublished,
+                likes = p.Like,
             }).ToListAsync();
             return OperateResult.Successed<ArticleDto>(new ArticleDto
             {
@@ -291,6 +291,7 @@ namespace MyBlog.Services.ServicesImpl
         {
             var articles = await _unitOfWork.GetRepository<Article>().Where(p => !p.IsDeleted && p.IsPublished)
                .OrderByDescending(p => p.Views)
+               .ThenBy(p => p.Like)
                .Take(count)
                .ToListAsync();
             var result = articles.Select(p => new ArticleInfo
@@ -302,7 +303,7 @@ namespace MyBlog.Services.ServicesImpl
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 Content = p.Content.ConvertMarkdownToHtml(),
                 views = p.Views,
-                IsPublished = p.IsPublished,
+                likes = p.Like
             }).ToList();
             return OperateResult.Successed(result);
         }

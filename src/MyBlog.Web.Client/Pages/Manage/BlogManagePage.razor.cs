@@ -113,7 +113,6 @@ namespace MyBlog.Web.Client.Pages.Manage
                     Title = article.Title,
                     Content = article.Content,
                     CategoryId = article.CategroyId,
-                    IsPublished = article.IsPublished,
                     Id = article.Id
                 };
 

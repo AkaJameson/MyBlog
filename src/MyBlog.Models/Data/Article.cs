@@ -16,7 +16,7 @@ namespace MyBlog.Models.Data
         public string Content { get; set; }
         [DefaultValue(0)]
         public int Views { get; set; } = 0;
-        public int Like { get; set; }
+        public int Like { get; set; } = 0;
         public DateTime CreatedDate { get; set; }
         public DateTime? PublishDate { get; set; }
         public int CategoryId { get; set; }

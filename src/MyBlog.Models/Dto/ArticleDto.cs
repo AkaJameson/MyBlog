@@ -8,7 +8,6 @@
     public class ArticleInfo
     {
         public int Id { get; set; }
-        public bool IsPublished { get; set; }
         /// <summary>
         /// 文章Id
         /// </summary>
@@ -29,6 +28,8 @@
         /// 浏览数
         /// </summary>
         public int views { get; set; }
+
+        public int likes { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>
