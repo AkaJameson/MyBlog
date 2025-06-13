@@ -5,94 +5,122 @@
 @attribute [Authorize]
 @layout MainLayout
 
-<div class="container">
-    <Card class="mb-3 card-body ">
-        <HeaderTemplate>
-            <div class="d-flex justify-content-between align-items-center">
-                <span class="mx-2">说说管理</span>
-                <Button Color="Color.Primary" OnClick="@(() => AddModalRef?.Toggle())">添加说说</Button>
-            </div>
-        </HeaderTemplate>
-        <BodyTemplate>
-            <div class="d-flex mb-3">
-                <Select TValue="string" @bind-Value="PageSizeStr" Items="@PageSizeOptions" OnSelectedItemChanged="@OnPageSizeChanged" />
-                <span class="ms-3 align-self-center">@PageInfoText</span>
-            </div>
+<div class="thoughts-container">
+    <!-- 头部区域 -->
+    <div class="header-section">
+        <div class="title-area">
+            <h2 class="page-title">说说管理</h2>
+            <p class="page-subtitle">管理您的动态和想法</p>
+        </div>
+        <Button Color="Color.Primary" class="add-btn" OnClick="@(() => AddModalRef?.Toggle())">
+            <i class="fas fa-plus me-2"></i>添加说说
+        </Button>
+    </div>
 
-            <Table TItem="ThoughtInfo" Items="@Thoughts" IsBordered="true" IsPagination="false" IsStriped="true">
+    <!-- 工具栏区域 -->
+    <div class="toolbar-section">
+        <div class="toolbar-left">
+            <div class="page-size-selector">
+                <label class="selector-label">每页显示：</label>
+                <Select TValue="string" @bind-Value="PageSizeStr" Items="@PageSizeOptions" OnSelectedItemChanged="@OnPageSizeChanged" />
+            </div>
+            <div class="data-info">
+                <span class="info-text">@PageInfoText</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 表格区域 -->
+    <div class="table-section">
+        <div class="table-wrapper">
+            <Table TItem="ThoughtInfo" Items="@Thoughts" IsBordered="true" IsPagination="false" IsStriped="true" class="modern-table">
                 <TableColumns>
                     <TableColumn @bind-Field="context.Content" Text="内容" />
                     <TableColumn @bind-Field="context.PublishTime" Text="发布时间" />
-                    <TableColumn @bind-Field="context.Id" Text="操作">
-                        <Template Context="value">
-                            <div class="d-flex gap-2">
-                                <Button Color="Color.Primary" Size="Size.ExtraSmall"
+                    <TableColumn @bind-Field="context.Id" Text="操作" Width="150">
+                        <Template Context="item">
+                            <div class="action-buttons">
+                                <Button Color="Color.Primary" Size="Size.ExtraSmall" class="edit-btn"
                                         OnClick="@(async () => {
-                                        ThoughtContent = Thoughts.FirstOrDefault(p=>p.Id == value.Value)?.Content??"";
-                                        CurrentThoughtId = value.Value;
+                                        ThoughtContent = Thoughts.FirstOrDefault(p=>p.Id == item.Value)?.Content??"";
+                                        CurrentThoughtId = item.Value;
                                         ModalRef?.Toggle();
                                     })">
-                                    编辑
+                                    <i class="fas fa-edit me-1"></i>编辑
                                 </Button>
-                                <Button Color="Color.Danger" Size="Size.ExtraSmall"
-                                        OnClick="@(async () => await DeleteThought(value.Value))">
-                                    删除
+                                <Button Color="Color.Danger" Size="Size.ExtraSmall" class="delete-btn"
+                                        OnClick="@(async () => await DeleteThought(item.Value))">
+                                    <i class="fas fa-trash-alt me-1"></i>删除
                                 </Button>
                             </div>
                         </Template>
                     </TableColumn>
                 </TableColumns>
             </Table>
+        </div>
+    </div>
 
-            <div class="d-flex justify-content-center mt-3">
-                <Pagination Value="@PageIndex" PageCount="@PageCount" OnPageLinkClick="@OnPageLinkClick" />
-            </div>
-        </BodyTemplate>
-    </Card>
+    <!-- 分页区域 -->
+    <div class="pagination-section">
+        <Pagination Value="@PageIndex" PageCount="@PageCount" OnPageLinkClick="@OnPageLinkClick" />
+    </div>
+
+    <!-- 编辑模态框 -->
     <Modal @ref="@ModalRef">
-        <ModalDialog Title="编辑说说" IsCentered="true" Size="Size.Large">
+        <ModalDialog Title="编辑说说" IsCentered="true" Size="Size.Large" class="custom-modal">
             <BodyTemplate>
-                <div class="mb-3">
-                    <Textarea Rows="5" Placeholder="请输入说说内容" @bind-Value="@ThoughtContent" />
+                <div class="modal-content-area">
+                    <div class="form-group">
+                        <label class="form-label">说说内容</label>
+                        <Textarea Rows="8" Placeholder="请输入说说内容..." @bind-Value="@ThoughtContent" class="custom-textarea" />
+                    </div>
                 </div>
             </BodyTemplate>
             <FooterTemplate>
-                <Button Color="Color.Secondary" OnClick="@(async () => {
-                    await OnDialogClosed();
-                    ModalRef.Toggle();
-                })">
-                    取消
-                </Button>
-                <Button Color="Color.Primary" OnClick="@(async () => {
-                    await UpdateThought(CurrentThoughtId);
-                    ModalRef.Toggle();
-                })">
-                    保存
-                </Button>
+                <div class="modal-actions">
+                    <Button Color="Color.Secondary" class="cancel-btn" OnClick="@(async () => {
+                        await OnDialogClosed();
+                        ModalRef.Toggle();
+                    })">
+                        <i class="fas fa-times me-2"></i>取消
+                    </Button>
+                    <Button Color="Color.Primary" class="save-btn" OnClick="@(async () => {
+                        await UpdateThought(CurrentThoughtId);
+                        ModalRef.Toggle();
+                    })">
+                        <i class="fas fa-save me-2"></i>保存
+                    </Button>
+                </div>
             </FooterTemplate>
         </ModalDialog>
     </Modal>
 
+    <!-- 添加模态框 -->
     <Modal @ref="@AddModalRef">
-        <ModalDialog Title="添加说说" IsCentered="true" Size="Size.Large">
+        <ModalDialog Title="添加说说" IsCentered="true" Size="Size.Large" class="custom-modal">
             <BodyTemplate>
-                <div class="mb-3">
-                    <Textarea Rows="5" Placeholder="请输入说说内容" @bind-Value="@ThoughtContent" />
+                <div class="modal-content-area">
+                    <div class="form-group">
+                        <label class="form-label">说说内容</label>
+                        <Textarea Rows="8" Placeholder="分享您的想法..." @bind-Value="@ThoughtContent" class="custom-textarea" />
+                    </div>
                 </div>
             </BodyTemplate>
             <FooterTemplate>
-                <Button Color="Color.Secondary" OnClick="@(async () => {
-                    await OnDialogClosed();
-                    AddModalRef.Toggle();
-                })">
-                    取消
-                </Button>
-                <Button Color="Color.Primary" OnClick="@(async () => {
-                    await AddThought();
-                    AddModalRef.Toggle();
-                })">
-                    添加
-                </Button>
+                <div class="modal-actions">
+                    <Button Color="Color.Secondary" class="cancel-btn" OnClick="@(async () => {
+                        await OnDialogClosed();
+                        AddModalRef.Toggle();
+                    })">
+                        <i class="fas fa-times me-2"></i>取消
+                    </Button>
+                    <Button Color="Color.Primary" class="add-btn" OnClick="@(async () => {
+                        await AddThought();
+                        AddModalRef.Toggle();
+                    })">
+                        <i class="fas fa-plus me-2"></i>添加
+                    </Button>
+                </div>
             </FooterTemplate>
         </ModalDialog>
     </Modal>
