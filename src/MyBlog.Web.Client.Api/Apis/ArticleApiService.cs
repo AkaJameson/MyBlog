@@ -63,9 +63,9 @@ namespace MyBlog.Web.Client.Api.Apis
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<OperateResult>();
         }
-        public async Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool addViews = true)
+        public async Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool isHtml ,bool addViews = true)
         {
-            var response = await _httpClient.GetAsync($"/api/Article/QuerySingle?id={id}&addViews={addViews}");
+            var response = await _httpClient.GetAsync($"/api/Article/QuerySingle?id={id}$isHtml={isHtml}&addViews={addViews}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<OperateResult<ArticleInfo>>();
         }

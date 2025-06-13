@@ -112,7 +112,7 @@ namespace MyBlog.Services.ServicesImpl
             await hotMapRepository.AddHotMapAsync();
             return OperateResult.Successed();
         }
-        public async Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool addViews = true)
+        public async Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool isHtml = false, bool addViews = true)
         {
             var article = await _unitOfWork.GetRepository<Article>().Where(p => p.Id == id).Include(p => p.Category).FirstOrDefaultAsync();
             if (article == null)
@@ -129,7 +129,7 @@ namespace MyBlog.Services.ServicesImpl
             {
                 CategoryName = article.Category.CategoryName,
                 CategroyId = article.CategoryId,
-                Content = article.Content.ConvertMarkdownToHtml(),
+                Content = isHtml ? article.Content.ConvertMarkdownToHtml() : article.Content,
                 CreateTime = article.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 Id = article.Id,
                 Title = article.Title,
@@ -177,9 +177,7 @@ namespace MyBlog.Services.ServicesImpl
                 CategoryName = p.Category.CategoryName,
                 CategroyId = p.CategoryId,
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                Content = articleQuery.IsExcerpt
-                ? MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200)
-                : p.Content.ConvertMarkdownToHtml(),
+                Content = MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200),
                 views = p.Views,
                 likes = p.Like
             }).ToListAsync();
@@ -230,9 +228,7 @@ namespace MyBlog.Services.ServicesImpl
                 CategoryName = p.Category.CategoryName,
                 CategroyId = p.CategoryId,
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                Content = articleQuery.IsExcerpt
-                ? MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200)
-                : p.Content.ConvertMarkdownToHtml(),
+                Content =MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200),
                 views = p.Views,
                 likes = p.Like,
             }).ToListAsync();

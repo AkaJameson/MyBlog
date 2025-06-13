@@ -22,7 +22,6 @@ namespace MyBlog.Web.Client.Pages
         {
             var result = await ArticleApiService.QueryPublishArticleAsync(new Models.Models.ArticleQuery
             {
-                IsExcerpt = true,
                 PageIndex = 1,
                 PageSize = 20
             });

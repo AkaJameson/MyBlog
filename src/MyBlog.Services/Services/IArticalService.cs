@@ -12,7 +12,7 @@ namespace MyBlog.Services.Services
         Task<OperateResult<ArticleDto>> QueryGarbageArticle(ArticleQuery articleQuery);
         Task<OperateResult> RecoverArticle(int id);
         Task<OperateResult> UpdateArtile(ArticleUpdate artical);
-        Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool addViews = true);
+        Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool isHtml = false, bool addViews = true);
         Task<OperateResult> RealDelete(int id);
         Task<OperateResult> AddLikeAsync(int id);
         Task<OperateResult<List<ArticleInfo>>> QueryMostViewdArticles(int count);

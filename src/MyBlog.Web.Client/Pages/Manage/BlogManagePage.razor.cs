@@ -104,7 +104,7 @@ namespace MyBlog.Web.Client.Pages.Manage
         /// <returns></returns>
         protected async Task OpenPost(int id)
         {
-           var result =  await ArticleApiService.QuerySingleArticle(id, true);
+           var result =  await ArticleApiService.QuerySingleArticle(id, false);
             if (result.Code == 200)
             {
                 var article = result.Data;
