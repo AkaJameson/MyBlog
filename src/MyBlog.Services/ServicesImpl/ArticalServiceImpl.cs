@@ -289,6 +289,7 @@ namespace MyBlog.Services.ServicesImpl
                .OrderByDescending(p => p.Views)
                .ThenBy(p => p.Like)
                .Take(count)
+               .Include(p=>p.Category)
                .ToListAsync();
             var result = articles.Select(p => new ArticleInfo
             {
@@ -297,11 +298,24 @@ namespace MyBlog.Services.ServicesImpl
                 CategoryName = p.Category.CategoryName,
                 CategroyId = p.CategoryId,
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                Content = p.Content.ConvertMarkdownToHtml(),
+                Content = MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200),
                 views = p.Views,
                 likes = p.Like
             }).ToList();
             return OperateResult.Successed(result);
+        }
+
+        public async Task<OperateResult<BlogDetailCount>> GetBlogDetailCount()
+        {
+            var articleCount = await _unitOfWork.GetRepository<Article>().CountAsync();
+            var categoryCount = await _unitOfWork.GetRepository<Category>().CountAsync();
+            var ThoughtCount = await _unitOfWork.GetRepository<Thought>().CountAsync();
+            return OperateResult.Successed(new BlogDetailCount
+            {
+                ArticleCount = articleCount,
+                CategoryCount = categoryCount,
+                ThoughtCount = ThoughtCount
+            });
         }
 
     }

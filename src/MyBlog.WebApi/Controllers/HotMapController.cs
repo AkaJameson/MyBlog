@@ -21,8 +21,10 @@ namespace MyBlog.WebApi.Controllers
             {
                 return OperateResult.Failed("参数错误");
             }
-            var hotMap = _hotMapRepository.GetHotMapAsync(year);
-            return OperateResult.Successed(hotMap);
+            var hotMap = await _hotMapRepository.GetHotMapAsync(year);
+            var stringMap = hotMap.ToDictionary(kv => kv.Key.ToString("yyyy-MM-dd"), kv => kv.Value);
+
+            return OperateResult.Successed(stringMap);
         }
     }
 }

@@ -1,4 +1,7 @@
 ﻿@page "/"
 @layout FrontView
 
-Helloworld
+@foreach (var post in Articles)
+{
+    <MyBlog.Web.Client.Components.ArticleCard Article="post"></MyBlog.Web.Client.Components.ArticleCard>
+}

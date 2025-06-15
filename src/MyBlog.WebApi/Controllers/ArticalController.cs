@@ -160,5 +160,14 @@ namespace MyBlog.WebApi.Controllers
             }
             return await _articleService.AddLikeAsync(id);
         }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<OperateResult<BlogDetailCount>> GetBlogDetailCount()
+        {
+    
+            return await _articleService.GetBlogDetailCount();
+        }
+
     }
 }

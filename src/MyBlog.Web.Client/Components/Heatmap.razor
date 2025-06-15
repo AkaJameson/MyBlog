@@ -44,9 +44,9 @@
 </div>
 
 @code {
-    [Parameter] public Dictionary<DateTime, int> ActivityData { get; set; }
-    [Parameter] public Func<Task<Dictionary<DateTime, int>>> QueryData { get; set; }
-
+    private Dictionary<DateTime, int> ActivityData { get; set; }
+    [Parameter] public Func<int, Task<Dictionary<DateTime, int>>> QueryData { get; set; }
+    private int CurrentYear { get; set; } = DateTime.Today.Year;
     private DateTime CurrentMonth = DateTime.Today;
     private List<HeatmapCell> HeatmapData = new();
 
@@ -54,7 +54,7 @@
     {
         if (QueryData != null)
         {
-            ActivityData = await QueryData.Invoke();
+            ActivityData = await QueryData.Invoke(CurrentYear);
         }
         else
         {
@@ -136,12 +136,22 @@
     private void PrevMonth()
     {
         CurrentMonth = CurrentMonth.AddMonths(-1);
+        if (CurrentMonth.Year != CurrentYear)
+        {
+            CurrentYear = CurrentMonth.Year;
+            ActivityData = QueryData?.Invoke(CurrentYear)?.Result;
+        }
         GenerateHeatmapData();
     }
 
     private void NextMonth()
     {
         CurrentMonth = CurrentMonth.AddMonths(1);
+        if (CurrentMonth.Year != CurrentYear)
+        {
+            CurrentYear = CurrentMonth.Year;
+            ActivityData = QueryData?.Invoke(CurrentYear)?.Result;
+        }
         GenerateHeatmapData();
     }
 

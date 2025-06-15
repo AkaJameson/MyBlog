@@ -6,26 +6,37 @@
     <div class="main-container">
         <!-- 左侧边栏 -->
         <div class="sidebar">
-            <ProfileCard />
-            <MyBlog.Web.Client.Components.Calendar/>
-            <Heatmap></Heatmap>
+            <ProfileCard Article="@BlogDetailCount.ArticleCount"
+                         Category="@BlogDetailCount.CategoryCount"
+                         Thought="@BlogDetailCount.ThoughtCount" />
+            <MyBlog.Web.Client.Components.Calendar />
+            <Heatmap QueryData="QueryHotMap"></Heatmap>
         </div>
-        
+
         <!-- 主内容区 -->
         <div class="fronter">
             <div class="fronter-body">
-                @Body
+                @if (ArticleInfos != null)
+                {
+                    <CascadingValue Value="ArticleInfos">
+                        @Body
+                    </CascadingValue>
+                }
+                else
+                {
+                    <p>正在加载热门文章...</p>
+                }
             </div>
-            <Divider/>
+            <Divider />
             <div class="footer-content">
                 <div>当前时间: @CurrentTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
                 <div>© 2025 Xin. All rights reserved.</div>
             </div>
         </div>
-        
+
         <!-- 右侧边栏 -->
         <div class="sidebar">
-            <PopularArticles />
+            <PopularArticles ArticleInfos="ArticleInfos" />
         </div>
     </div>
 </div>

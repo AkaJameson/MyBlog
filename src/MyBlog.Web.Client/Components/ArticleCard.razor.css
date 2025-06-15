@@ -16,6 +16,8 @@
 .card-header {
     padding: 15px 20px;
     border-bottom: 1px solid #eee;
+    display:flex;
+    justify-content:space-between;
 }
 
     .card-header h3 {
@@ -59,6 +61,8 @@
 }
 
 .card-footer {
+    display:flex;
+    justify-content:flex-end;
     padding: 10px 20px;
     background-color: #f8f9fa;
     border-top: 1px solid #eee;
