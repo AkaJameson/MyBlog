@@ -6,7 +6,8 @@
     </div>
     @for (int i = 1; i <= ArticleInfos.Count; i++)
     {
-        <div class="article-item">
+        var index = i - 1;
+        <div class="article-item" @onclick="()=>HandleArticleClick(ArticleInfos[index])">
             <div class="article-rank">@i</div>
             <div class="article-info">
                 <div class="article-title">@ArticleInfos[i-1].Title</div>
