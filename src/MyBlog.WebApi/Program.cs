@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MyBlog.DataAccessor.EFCore;
 using MyBlog.DataAccessor.EFCore.UnitofWork;
@@ -8,7 +7,6 @@ using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Utilites;
 using Si.Logging;
 using System.Text;
-using Microsoft.AspNetCore.Builder;
 
 namespace MyBlog.WebApi
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using MyBlog.Models.Data;
 using MyBlog.Models.Dto;
 
 namespace MyBlog.Web.Client.Components
@@ -8,6 +9,8 @@ namespace MyBlog.Web.Client.Components
         [Parameter]
         public List<ArticleInfo> ArticleInfos { get; set; }
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
         protected override void OnParametersSet()
         {
             if (ArticleInfos == null)
@@ -22,6 +25,10 @@ namespace MyBlog.Web.Client.Components
                 };
             }
 
+        }
+        protected void HandleArticleClick(ArticleInfo article)
+        {
+            NavigationManager.NavigateTo($"/view/article/{article.Id}?LikeCount={article.likes}");
         }
 
     }
