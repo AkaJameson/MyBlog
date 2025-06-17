@@ -7,3 +7,4 @@
 
 # 递归忽略 * 目录下所有解决方案的 obj 文件夹
 */**/obj/
+/src/MyBlog.WebApi/myblog-webapi.tar
