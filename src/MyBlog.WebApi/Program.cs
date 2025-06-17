@@ -16,7 +16,6 @@ namespace MyBlog.WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.AddLogging();
-
             if (builder.Environment.IsDevelopment())
             {
                 builder.Services.AddCors(option =>
