@@ -23,5 +23,20 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\MyBlog.Web.Client.Api\MyBlog.Web.Client.Api.csproj" />
 	</ItemGroup>
+	<PropertyGroup>
+		<WebApiWwwRootPath>..\MyBlog.WebApi\wwwroot</WebApiWwwRootPath>
+	</PropertyGroup>
+
+	<Target Name="CopyToWebApiWwwRoot" AfterTargets="Publish">
+		<ItemGroup>
+			<PublishedBlazorFiles Include="$(PublishDir)wwwroot\**\*" />
+		</ItemGroup>
+
+		<Copy
+		  SourceFiles="@(PublishedBlazorFiles)"
+		  DestinationFolder="$(WebApiWwwRootPath)\%(RecursiveDir)"
+		  SkipUnchangedFiles="true"
+		  Retries="2" />
+	</Target>
 
 </Project>

@@ -12,6 +12,7 @@
     {
         public int Id { get; set; }
         public string CategoryName { get; set; }
+        public int ArticleCount { get; set; }
         public string CreateTime { get; set; }
     }
 }

@@ -24,9 +24,7 @@
     }
 
 .timeline {
-    position: relative;
-    padding-left: 30px;
-    margin-bottom: 30px;
+  
 }
 
     .timeline::before {

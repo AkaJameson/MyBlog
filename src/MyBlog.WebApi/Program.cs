@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MyBlog.DataAccessor.EFCore;
 using MyBlog.DataAccessor.EFCore.UnitofWork;
@@ -7,6 +8,7 @@ using MyBlog.DataAccessor.EFCore.UnitofWork.Abstractions;
 using MyBlog.Utilites;
 using Si.Logging;
 using System.Text;
+using Microsoft.AspNetCore.Builder;
 
 namespace MyBlog.WebApi
 {
@@ -16,7 +18,7 @@ namespace MyBlog.WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.AddLogging();
-         
+
             if (builder.Environment.IsDevelopment())
             {
                 builder.Services.AddCors(option =>
@@ -96,7 +98,11 @@ namespace MyBlog.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                RequestPath=""
+            });
+            app.MapFallbackToFile("index.html");
             app.UseExceptionHandler(errorApp =>
             {
                 errorApp.Run(async context =>

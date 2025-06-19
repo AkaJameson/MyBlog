@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\项目\My\MyBlog\src\MyBlog.Web.Client\bin\Release\net8.0\browser-wasm\publish\</_PublishTargetUrl>
+    <History>True|2025-06-19T11:00:24.2539919Z||;True|2025-06-19T18:58:15.2919393+08:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

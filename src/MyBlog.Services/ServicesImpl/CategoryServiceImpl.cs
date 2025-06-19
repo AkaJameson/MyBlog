@@ -6,6 +6,7 @@ using MyBlog.Models.Dto;
 using MyBlog.Models.Models;
 using MyBlog.Services.Repository;
 using MyBlog.Services.Services;
+using MyBlog.Services.ServicesHelper;
 using MyBlog.Utilites;
 
 namespace MyBlog.Services.ServicesImpl
@@ -73,15 +74,19 @@ namespace MyBlog.Services.ServicesImpl
         /// <returns></returns>
         public async Task<OperateResult<CategoryDto>> QueryCategory(CategoryQuery query)
         {
-            var categorys = await _unitOfWork.GetRepository<Category>()
-                                .GetPagedAsync(query.PageIndex, query.PageSize);
+            var categorys = await _unitOfWork.GetRepository<Category>().AsNoTracking().Include(p => p.Articles)
+                                .Skip(Math.Max(0, query.PageIndex - 1) * Math.Max(1, query.PageSize))
+                                .Take(Math.Max(1, query.PageSize)).ToListAsync();
+            var totalCount = await _unitOfWork.GetRepository<Category>().CountAsync();
             var result = new CategoryDto
             {
-                TotalCount = categorys.TotalCount,
-                CategoryInfos = categorys.Items.Select(c => new CategoryInfo
+                TotalCount = totalCount,
+                CategoryInfos = categorys.Select(c => new CategoryInfo
                 {
                     Id = c.Id,
                     CategoryName = c.CategoryName,
+                    ArticleCount = c.Articles.Count,
+                 
                     CreateTime = c.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 }).ToList()
             };
@@ -120,10 +125,12 @@ namespace MyBlog.Services.ServicesImpl
         public async Task<OperateResult<List<CategoryInfo>>> GetCategoryList()
         {
             var categorys = await _unitOfWork.GetRepository<Category>().AsNoTracking()
+                .Include(p => p.Articles)
                 .Select(p => new CategoryInfo
                 {
-                    CategoryName = p.CategoryName,
                     Id = p.Id,
+                    CategoryName = p.CategoryName,
+                    ArticleCount = p.Articles.Count,
                     CreateTime = p.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 }).ToListAsync();
             return OperateResult.Successed(categorys);
