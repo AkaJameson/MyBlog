@@ -14,7 +14,8 @@ namespace MyBlog.Services.Services
         Task<OperateResult> UpdateArtile(ArticleUpdate artical);
         Task<OperateResult<ArticleInfo>> QuerySingleArticle(int id, bool isHtml = false, bool addViews = true);
         Task<OperateResult> RealDelete(int id);
-        Task<OperateResult> AddLikeAsync(int id);
+        Task<OperateResult> AddLikeAsync(int id,string ipaddress);
+        Task<OperateResult> CheckLikeState(int id,string ipaddress);
         Task<OperateResult<List<ArticleInfo>>> QueryMostViewdArticles(int count);
         Task<OperateResult<BlogDetailCount>> GetBlogDetailCount();
     }

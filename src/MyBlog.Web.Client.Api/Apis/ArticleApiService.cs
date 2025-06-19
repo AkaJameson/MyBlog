@@ -81,5 +81,27 @@ namespace MyBlog.Web.Client.Api.Apis
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<OperateResult<BlogDetailCount>>();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<OperateResult<LikeState>> CheckLikeState(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/Article/CheckLikeState?id={id}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<OperateResult<LikeState>>();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<OperateResult<LikeState>> AddLike(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/Article/AddLike?id={id}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<OperateResult<LikeState>>();
+        }
     }
 }

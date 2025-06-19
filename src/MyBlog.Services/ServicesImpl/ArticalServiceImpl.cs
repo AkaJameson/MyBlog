@@ -8,6 +8,7 @@ using MyBlog.Services.Repository;
 using MyBlog.Services.Services;
 using MyBlog.Services.ServicesHelper;
 using MyBlog.Utilites;
+using System.Net;
 
 namespace MyBlog.Services.ServicesImpl
 {
@@ -270,15 +271,36 @@ namespace MyBlog.Services.ServicesImpl
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<OperateResult> AddLikeAsync(int id)
+        public async Task<OperateResult> AddLikeAsync(int id, string ipAddress)
         {
+            var lastLike = await _unitOfWork.GetRepository<ArticleLikeRecord>()
+            .FirstOrDefaultAsync(predicate: r =>
+            r.ArticleId == id &&
+            r.IpAddress == ipAddress);
+
+            if (lastLike != null)
+            {
+                return OperateResult.Failed("已经点赞过了");
+            }
+
             var article = await _unitOfWork.GetRepository<Article>().GetByIdAsync(id);
             if (article == null)
             {
                 return OperateResult.Failed("文章不存在");
             }
+
+            // 更新点赞数
             article.Like++;
             await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+
+            // 添加点赞记录
+            var record = new ArticleLikeRecord
+            {
+                ArticleId = id,
+                IpAddress = ipAddress
+            };
+            await _unitOfWork.GetRepository<ArticleLikeRecord>().AddAsync(record);
+
             await _unitOfWork.CommitAsync();
             return OperateResult.Successed();
         }
@@ -318,5 +340,27 @@ namespace MyBlog.Services.ServicesImpl
             });
         }
 
+        public async Task<OperateResult> CheckLikeState(int id, string ipaddress)
+        {
+            var lastLike = await _unitOfWork.GetRepository<ArticleLikeRecord>()
+           .FirstOrDefaultAsync(predicate: r =>
+           r.ArticleId == id &&
+           r.IpAddress == ipaddress);
+
+            if (lastLike != null)
+            {
+                return OperateResult.Successed(new LikeState
+                {
+                    IsLike = true
+                });
+            }
+            else
+            {
+                return OperateResult.Successed(new
+                {
+                    IsLike = false
+                });
+            }
+        }
     }
 }

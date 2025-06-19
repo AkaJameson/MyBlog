@@ -1,0 +1,229 @@
+﻿/* Rambling.razor.css */
+.rambling-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+    .header h2 {
+        color: #4361ee;
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+
+.timeline {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 30px;
+}
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #e9ecef;
+    }
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+    .timeline-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+.timeline-marker {
+    position: absolute;
+    left: -40px;
+    top: 20px;
+    z-index: 10;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #4361ee;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px #4361ee;
+}
+
+.timeline-content {
+    padding: 20px;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f5f7fa;
+}
+
+.date {
+    color: #4361ee;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.id {
+    color: #6c757d;
+    font-size: 0.85rem;
+    background: #f8f9fa;
+    padding: 3px 8px;
+    border-radius: 12px;
+}
+
+.content {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.timeline-actions {
+    display: flex;
+    gap: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f5f7fa;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+    .action-btn:hover {
+        background: #f0f2f5;
+        color: #4361ee;
+    }
+
+    .action-btn .icon {
+        font-size: 1.1rem;
+    }
+
+.no-thoughts {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.empty-state {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+    .empty-state .icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        color: #adb5bd;
+    }
+
+    .empty-state h3 {
+        color: #495057;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #6c757d;
+    }
+
+/* 分页样式 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    padding: 8px 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+    .pagination-btn:hover:not(:disabled) {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+
+    .pagination-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .pagination-btn.active {
+        background-color: #4361ee;
+        color: white;
+        border-color: #4361ee;
+    }
+
+@media (max-width: 768px) {
+    .rambling-container {
+        padding: 15px;
+    }
+
+    .timeline {
+        padding-left: 20px;
+    }
+
+    .timeline-marker {
+        left: -30px;
+    }
+
+    .timeline-content {
+        padding: 15px;
+    }
+
+    .header h2 {
+        font-size: 1.8rem;
+    }
+
+    .content {
+        font-size: 1rem;
+    }
+
+    .timeline-actions {
+        flex-wrap: wrap;
+    }
+}

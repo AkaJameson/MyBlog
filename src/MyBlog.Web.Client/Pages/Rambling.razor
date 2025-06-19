@@ -1,0 +1,65 @@
+﻿@page "/views/Rambling"
+@layout FrontView
+@inherits RamblingBase
+
+<div class="rambling-container">
+    <div class="header">
+        <h2>阿巴阿巴······</h2>
+    </div>
+
+    <div class="timeline">
+        @if (Thoughts != null && Thoughts.Any())
+        {
+            @foreach (var thought in Thoughts)
+            {
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="dot"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span class="date">@thought.PublishTime</span>
+                            <span class="id">#@thought.Id</span>
+                        </div>
+                        <div class="content">
+                            @thought.Content
+                        </div>
+                        <div class="timeline-actions">
+                            <button class="action-btn">
+                                <i class="icon like">❤️</i>
+                                <span>点赞</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-thoughts">
+                <div class="empty-state">
+                    <i class="icon">📝</i>
+                    <h3>暂无说说</h3>
+                    <p>还没有发表过任何说说，开始记录吧</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Thoughts != null && Thoughts.Any() && TotalPages > 1)
+    {
+        <div class="pagination">
+            <button class="pagination-btn" @onclick="() => ChangePage(1)" disabled="@(CurrentPage == 1)">首页</button>
+            <button class="pagination-btn" @onclick="() => ChangePage(CurrentPage - 1)" disabled="@(CurrentPage == 1)">上一页</button>
+
+            @for (int i = Math.Max(1, CurrentPage - 2); i <= Math.Min(TotalPages, CurrentPage + 2); i++)
+            {
+                <button class="pagination-btn @(i == CurrentPage ? "active" : "")" @onclick="() => ChangePage(i)">@i</button>
+            }
+
+            <button class="pagination-btn" @onclick="() => ChangePage(CurrentPage + 1)" disabled="@(CurrentPage == TotalPages)">下一页</button>
+            <button class="pagination-btn" @onclick="() => ChangePage(TotalPages)" disabled="@(CurrentPage == TotalPages)">尾页</button>
+        </div>
+    }
+</div>
+

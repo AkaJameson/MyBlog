@@ -10,9 +10,9 @@ namespace MyBlog.Web.Client.Layout
         protected DateTime CurrentTime = DateTime.Now;
         [Inject]
         private ArticleApiService ArticleApiService { get; set; }
-        [Inject] 
+        [Inject]
         private HotMapApiService HotMapApiService { get; set; }
-        [Inject] 
+        [Inject]
         private NavigationManager NavigationManager { get; set; }
         private List<ArticleInfo> ArticleInfos { get; set; }
         private Timer? timer;
@@ -24,6 +24,8 @@ namespace MyBlog.Web.Client.Layout
             {
                 ArticleInfos = result.Data;
             }
+            await GetBlogDetailCount();
+
         }
         private async Task<Dictionary<DateTime, int>> QueryHotMap(int year)
         {
@@ -38,7 +40,10 @@ namespace MyBlog.Web.Client.Layout
         protected async Task GetBlogDetailCount()
         {
             var result = await ArticleApiService.GetBlogDetailCount();
-            BlogDetailCount = result.Data;
+            if (result.Code == 200)
+            {
+                BlogDetailCount = result.Data;
+            }
         }
 
         private void UpdateTime(object? state)

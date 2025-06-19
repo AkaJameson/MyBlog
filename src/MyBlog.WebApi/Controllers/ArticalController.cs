@@ -12,10 +12,11 @@ namespace MyBlog.WebApi.Controllers
     public class ArticleController : DefaultController
     {
         private readonly IArticalService _articleService;
-
-        public ArticleController(IArticalService articleService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ArticleController(IArticalService articleService, IHttpContextAccessor httpContextAccessor)
         {
             _articleService = articleService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -158,15 +159,27 @@ namespace MyBlog.WebApi.Controllers
             {
                 return OperateResult.Failed<ArticleInfo>("无效的请求格式");
             }
-            return await _articleService.AddLikeAsync(id);
+            var ipAddress = _httpContextAccessor?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            return await _articleService.AddLikeAsync(id,ipAddress);
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<OperateResult<BlogDetailCount>> GetBlogDetailCount()
         {
-    
             return await _articleService.GetBlogDetailCount();
+        }
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperateResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<OperateResult> CheckLikeState(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return OperateResult.Failed<ArticleInfo>("无效的请求格式");
+            }
+            var ipAddress = _httpContextAccessor?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            return await _articleService.CheckLikeState(id, ipAddress);
         }
 
     }

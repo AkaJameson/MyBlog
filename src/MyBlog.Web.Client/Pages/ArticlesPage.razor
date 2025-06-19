@@ -1,0 +1,35 @@
+﻿@page "/views/articles"
+@using MyBlog.Web.Client.Components
+@layout FrontView
+@inherits ArticlesPageBase
+
+<div class="articles-container">
+    @if (Articles != null && Articles.Any())
+    {
+        <div class="article-area">
+            @foreach (var post in Articles)
+            {
+                <ArticleCard Article="post"></ArticleCard>
+            }
+        </div>
+
+        <div class="pagination">
+            <button class="pagination-btn" @onclick="() => ChangePage(1)" disabled="@(CurrentPage == 1)">首页</button>
+            <button class="pagination-btn" @onclick="() => ChangePage(CurrentPage - 1)" disabled="@(CurrentPage == 1)">上一页</button>
+
+            @for (int i = Math.Max(1, CurrentPage - 2); i <= Math.Min(TotalPages, CurrentPage + 2); i++)
+            {
+                <button class="pagination-btn @(i == CurrentPage ? "active" : "")" @onclick="() => ChangePage(i)">@i</button>
+            }
+
+            <button class="pagination-btn" @onclick="() => ChangePage(CurrentPage + 1)" disabled="@(CurrentPage == TotalPages)">下一页</button>
+            <button class="pagination-btn" @onclick="() => ChangePage(TotalPages)" disabled="@(CurrentPage == TotalPages)">尾页</button>
+        </div>
+    }
+    else
+    {
+        <div class="no-articles">
+            <p>暂无文章</p>
+        </div>
+    }
+</div>

@@ -1,4 +1,5 @@
 ﻿@page "/view/article/{Id:int}"
+@using Microsoft.AspNetCore.WebUtilities
 @using MyBlog.Web.Client.Api.Apis
 @layout FrontView
 
@@ -6,25 +7,62 @@
     @((MarkupString)ArticleHtmlContent)
 </div>
 
+<div class="like-container">
+    <button class="like-btn @(IsLiked ? "liked" : "")" @onclick="AddLike">
+        <span class="like-icon">❤️</span>
+        <span class="like-text">@(IsLiked ? "已点赞" : "点赞")</span>
+        <span class="like-count">@LikeCount</span>
+    </button>
+</div>
+
 @code {
     [Parameter]
     public int Id { get; set; }
-  [Inject]
-     public ArticleApiService articleApiService { get; set; }
+    [Parameter]
+    public int LikeCount { get; set; }
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    [Inject]
+    public ArticleApiService articleApiService { get; set; }
 
     private string ArticleHtmlContent = "";
 
+    private bool IsLiked = false;
+
     protected override async Task OnInitializedAsync()
     {
-        // 假设通过 API 拿到 HTML 内容
+        // 获取文章内容
         var result = await articleApiService.QuerySingleArticle(Id, true);
-        if(result.Code == 200)
+        var uri = new Uri(NavigationManager.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+        if (query.TryGetValue("LikeCount", out var val))
+        {
+            int.TryParse(val, out var parsedCount);
+            LikeCount = parsedCount;
+        }
+        if (result.Code == 200)
         {
             ArticleHtmlContent = result.Data.Content;
         }
         else
         {
             ArticleHtmlContent = "文章不存在";
+        }
+
+        // 获取点赞数据
+        var operateResult = await articleApiService.CheckLikeState(Id);
+        if (result.Code == 200)
+        {
+            IsLiked = operateResult.Data.IsLike;
+        }
+    }
+    protected async Task AddLike()
+    {
+        var result = await articleApiService.AddLike(Id);
+        if(result.Code == 200)
+        {
+            IsLiked = true;
+            LikeCount++;
         }
     }
 }

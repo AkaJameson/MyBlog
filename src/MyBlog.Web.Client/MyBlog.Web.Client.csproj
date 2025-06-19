@@ -13,6 +13,7 @@
 		<PackageReference Include="BootstrapBlazor" Version="9.7.0" />
 		<PackageReference Include="BootstrapBlazor.FontAwesome" Version="9.0.2" />
 		<PackageReference Include="BootstrapBlazor.Markdown" Version="9.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.17" />
 	</ItemGroup>
 
 	<ItemGroup>

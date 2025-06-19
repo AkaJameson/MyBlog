@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BootstrapBlazor.Components;
+using Microsoft.AspNetCore.Components;
 using MyBlog.Models.Dto;
 
 namespace MyBlog.Web.Client.Components
@@ -10,7 +11,7 @@ namespace MyBlog.Web.Client.Components
 
         private void NavigateToDetail(int articleId)
         {
-            NavigationManager.NavigateTo($"/view/article/{articleId}");
+            NavigationManager.NavigateTo($"/view/article/{articleId}?LikeCount={Article.likes}");
         }
     }
 }

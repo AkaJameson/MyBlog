@@ -32,6 +32,10 @@ namespace MyBlog.DataAccessor.EFCore.UnitofWork
 
         public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
         {
+            if(predicate == null)
+            {
+                return await DbSet.CountAsync();
+            }
             return await DbSet.CountAsync(predicate);
         }
 
