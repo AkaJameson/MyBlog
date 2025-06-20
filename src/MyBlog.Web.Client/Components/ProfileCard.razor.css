@@ -22,13 +22,13 @@
     height: 80px;
     border-radius: 50%;
     background-image: url("images/profile.jpg");
-    background-size: cover; /* 确保图片覆盖整个区域 */
-    background-position: center; /* 图片居中 */
-    background-color: #ccc; /* 图片加载失败时的备用颜色 */
+    background-size: cover;
+    background-position: center;
+    background-color: #ccc;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white; /* 备用文字颜色 */
+    color: white;
     font-size: 2rem;
     font-weight: bold;
     margin-right: 20px;

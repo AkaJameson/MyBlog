@@ -91,10 +91,9 @@
 }
 
 .views::before {
-    content: "👁️ ";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f06e"; /* Unicode for eye icon */
 }
 
-.comments::before {
-    content: "💬 ";
-}
 

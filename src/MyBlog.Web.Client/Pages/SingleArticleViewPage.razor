@@ -3,16 +3,18 @@
 @using MyBlog.Web.Client.Api.Apis
 @layout FrontView
 
-<div class="markdown-body" @key="ArticleHtmlContent">
-    @((MarkupString)ArticleHtmlContent)
-</div>
-
-<div class="like-container">
-    <button class="like-btn @(IsLiked ? "liked" : "")" @onclick="AddLike">
-        <span class="like-icon">❤️</span>
-        <span class="like-text">@(IsLiked ? "已点赞" : "点赞")</span>
-        <span class="like-count">@LikeCount</span>
-    </button>
+<div style="padding: 5px;display:flex;align-content:center;flex-direction:column;">
+    @if (!string.IsNullOrEmpty(ArticleHtmlContent))
+    {
+        <Markdown IsViewer="true" Value="@ArticleHtmlContent" @ref="md" @key="ArticleHtmlContent"></Markdown>
+    }
+    <div class="like-container">
+        <button class="like-btn @(IsLiked ? "liked" : "")" @onclick="AddLike">
+            <span class="like-icon">❤️</span>
+            <span class="like-text">@(IsLiked ? "已点赞" : "点赞")</span>
+            <span class="like-count">@LikeCount</span>
+        </button>
+    </div>
 </div>
 
 @code {
@@ -20,19 +22,22 @@
     public int Id { get; set; }
     [Parameter]
     public int LikeCount { get; set; }
+
     [Inject]
     private NavigationManager NavigationManager { get; set; }
     [Inject]
     public ArticleApiService articleApiService { get; set; }
 
-    private string ArticleHtmlContent = "";
-
+    private Markdown md;
+    private string ArticleHtmlContent = string.Empty;
     private bool IsLiked = false;
+
+    private bool isFirstRenderDone = false;
 
     protected override async Task OnInitializedAsync()
     {
         // 获取文章内容
-        var result = await articleApiService.QuerySingleArticle(Id, true);
+        var result = await articleApiService.QuerySingleArticle(Id, false);
         var uri = new Uri(NavigationManager.Uri);
         var query = QueryHelpers.ParseQuery(uri.Query);
         if (query.TryGetValue("LikeCount", out var val))
@@ -51,15 +56,17 @@
 
         // 获取点赞数据
         var operateResult = await articleApiService.CheckLikeState(Id);
-        if (result.Code == 200)
+        if (operateResult.Code == 200)
         {
             IsLiked = operateResult.Data.IsLike;
         }
     }
+   
+
     protected async Task AddLike()
     {
         var result = await articleApiService.AddLike(Id);
-        if(result.Code == 200)
+        if (result.Code == 200)
         {
             IsLiked = true;
             LikeCount++;
