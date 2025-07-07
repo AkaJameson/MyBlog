@@ -62,7 +62,8 @@ namespace MyBlog.Services.ServicesImpl
                     query.PageIndex,
                     query.PageSize,
                     predicate: t => !t.IsDeleted,
-                    orderBy: q=>q.PublishTime
+                    orderBy: q => q.PublishTime,
+                    false
                 );
 
 

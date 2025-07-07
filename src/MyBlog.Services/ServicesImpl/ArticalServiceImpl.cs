@@ -171,7 +171,8 @@ namespace MyBlog.Services.ServicesImpl
             query.Include(p => p.Category);
             var articles = query.Skip(Math.Max(articleQuery.PageIndex - 1, 0) * Math.Max(articleQuery.PageSize, 1))
                 .Take(Math.Max(articleQuery.PageSize, 1));
-            var result = await articles.Select(p => new ArticleInfo
+            var result = await articles.ToListAsync();
+            var orderResult = result.OrderByDescending(p => p.PublishDate ?? DateTime.MinValue).Select(p => new ArticleInfo
             {
                 Id = p.Id,
                 Title = p.Title,
@@ -181,11 +182,11 @@ namespace MyBlog.Services.ServicesImpl
                 Content = MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200),
                 views = p.Views,
                 likes = p.Like
-            }).ToListAsync();
+            }).ToList();
             return OperateResult.Successed<ArticleDto>(new ArticleDto
             {
                 TotalCount = totalCount,
-                articleInfos = result
+                articleInfos = orderResult
             });
         }
         /// <summary>
@@ -222,21 +223,22 @@ namespace MyBlog.Services.ServicesImpl
             query.Include(p => p.Category);
             var articles = query.Skip(Math.Max(articleQuery.PageIndex - 1, 0) * Math.Max(articleQuery.PageSize, 1))
                 .Take(Math.Max(articleQuery.PageSize, 1));
-            var result = await articles.Select(p => new ArticleInfo
+            var result = await articles.ToListAsync();
+            var orderResult = result.OrderByDescending(p => p.PublishDate ?? DateTime.MinValue).Select(p => new ArticleInfo
             {
                 Id = p.Id,
                 Title = p.Title,
                 CategoryName = p.Category.CategoryName,
                 CategroyId = p.CategoryId,
                 CreateTime = p.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                Content =MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200),
+                Content = MarkdownHelper.ExtractPlainTextFromMarkdown(p.Content, 200),
                 views = p.Views,
                 likes = p.Like,
-            }).ToListAsync();
+            }).ToList();
             return OperateResult.Successed<ArticleDto>(new ArticleDto
             {
                 TotalCount = totalCount,
-                articleInfos = result
+                articleInfos = orderResult
             });
         }
         /// <summary>
@@ -311,7 +313,7 @@ namespace MyBlog.Services.ServicesImpl
                .OrderByDescending(p => p.Views)
                .ThenBy(p => p.Like)
                .Take(count)
-               .Include(p=>p.Category)
+               .Include(p => p.Category)
                .ToListAsync();
             var result = articles.Select(p => new ArticleInfo
             {
